@@ -3,6 +3,14 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const Sequelize = require('sequelize');
+const sequelize = new Sequelize('comunidades', 'ttads', 'ttads', {
+  dialect: 'mysql',
+  dialectOptions: {
+    // Your mysql2 options here
+    host: 'localhost'
+  }
+})
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
