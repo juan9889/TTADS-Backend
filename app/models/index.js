@@ -1,3 +1,4 @@
+const { applySchemaRelations } = require('./schema_relations');
 const dbConfig = require("../config/db.config.js");
 
 const Sequelize = require("sequelize");
@@ -21,5 +22,8 @@ db.sequelize = sequelize;
 
 db.tutorials = require("./tutorial.model.js")(sequelize, Sequelize);
 db.ciudades = require("./ciudad.model.js")(sequelize, Sequelize);
+db.provincias = require("./provincia.model.js")(sequelize, Sequelize);
+
+applySchemaRelations(sequelize);
 
 module.exports = db;

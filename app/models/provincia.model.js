@@ -1,9 +1,9 @@
 module.exports = (sequelize, Sequelize) => {
-    const Ciudad = sequelize.define("ciudad", {
+    const Provincia = sequelize.define("provincia", {
       nombre: {
         type: Sequelize.STRING
       }
     });
-    return Ciudad;
+    return Provincia;
   };
   

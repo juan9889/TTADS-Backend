@@ -24,6 +24,8 @@ db.sequelize.sync();
 //   console.log("Drop and re-sync db.");
 // });
 
+
+
 // simple route
 app.get("/", (req, res) => {
   res.json({ message: "Bienvenido a la api de comunidades" });
@@ -31,6 +33,9 @@ app.get("/", (req, res) => {
 
 require("./app/routes/turorial.routes")(app);
 require("./app/routes/ciudad.routes")(app);
+require("./app/routes/provincia.routes")(app);
+
+
 
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;

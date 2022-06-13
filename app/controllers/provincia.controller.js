@@ -1,10 +1,9 @@
 const db = require("../models");
-const Ciudad = db.ciudades;
 const Provincia = db.provincias;
 const Op = db.Sequelize.Op;
 
 // Create and Save a new ciudad
-exports.create = async (req, res) => {
+exports.create = (req, res) => {
   // Validate request
   if (!req.body.nombre) {
     res.status(400).send({
@@ -13,17 +12,13 @@ exports.create = async (req, res) => {
     return;
   }
 
+  // Create a Tutorial
+  const provincia = {
+    nombre: req.body.nombre
+  };
 
- 
- //var provincia =  await Provincia.findByPk(req.body.provincia).then( () => {console.log(provincia)});
-  
- //console.log(provincia);
-  const ciudad = ({
-    nombre: req.body.nombre/*
-    provincia : provincia,*/
-  });
-
-  Ciudad.create(ciudad)
+  // Save Tutorial in the database
+  Provincia.create(provincia)
     .then(data => {
       res.send(data);
     })
@@ -40,7 +35,7 @@ exports.findAll = (req, res) => {
   const nombre = req.query.nombre;
   var condition = nombre ? { nombre: { [Op.like]: `%${nombre}%` } } : null;
 
-  Ciudad.findAll({ where: condition })
+  Provincia.findAll({ where: condition })
     .then(data => {
       res.send(data);
     })
@@ -56,7 +51,7 @@ exports.findAll = (req, res) => {
 exports.findOne = (req, res) => {
   const id = req.params.id;
 
-  Ciudad.findByPk(id)
+  Provincia.findByPk(id)
     .then(data => {
       if (data) {
         res.send(data);
@@ -77,23 +72,23 @@ exports.findOne = (req, res) => {
 exports.update = (req, res) => {
   const id = req.params.id;
 
-  Ciudad.update(req.body, {
+  Provincia.update(req.body, {
     where: { id: id }
   })
     .then(num => {
       if (num == 1) {
         res.send({
-          message: "ciudad was updated successfully."
+          message: "provincia was updated successfully."
         });
       } else {
         res.send({
-          message: `Cannot update ciudad with id=${id}. Maybe ciudad was not found or req.body is empty!`
+          message: `Cannot update provincia with id=${id}. Maybe provincia was not found or req.body is empty!`
         });
       }
     })
     .catch(err => {
       res.status(500).send({
-        message: "Error updating ciudad with id=" + id
+        message: "Error updating provincia with id=" + id
       });
     });
 };
@@ -102,23 +97,23 @@ exports.update = (req, res) => {
 exports.delete = (req, res) => {
   const id = req.params.id;
 
-  Ciudad.destroy({
+  Provincia.destroy({
     where: { id: id }
   })
     .then(num => {
       if (num == 1) {
         res.send({
-          message: "ciudad was deleted successfully!"
+          message: "provincia was deleted successfully!"
         });
       } else {
         res.send({
-          message: `Cannot delete ciudad with id=${id}. Maybe ciudad was not found!`
+          message: `Cannot delete provincia with id=${id}. Maybe provincia was not found!`
         });
       }
     })
     .catch(err => {
       res.status(500).send({
-        message: "Could not delete ciudad with id=" + id
+        message: "Could not delete provincia with id=" + id
       });
     });
 };
