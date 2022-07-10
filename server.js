@@ -32,8 +32,8 @@ app.get("/", (req, res) => {
 });
 
 require("./app/routes/turorial.routes")(app);
-require("./app/routes/ciudad.routes")(app);
-require("./app/routes/provincia.routes")(app);
+require("./app/routes/city.routes")(app);
+require("./app/routes/province.routes")(app);
 
 
 

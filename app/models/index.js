@@ -21,8 +21,8 @@ db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
 db.tutorials = require("./tutorial.model.js")(sequelize, Sequelize);
-db.ciudades = require("./ciudad.model.js")(sequelize, Sequelize);
-db.provincias = require("./provincia.model.js")(sequelize, Sequelize);
+db.city = require("./city.model.js")(sequelize, Sequelize);
+db.province = require("./province.model.js")(sequelize, Sequelize);
 
 applySchemaRelations(sequelize);
 

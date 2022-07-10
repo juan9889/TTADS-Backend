@@ -1,8 +1,8 @@
 function applySchemaRelations(sequelize) {
-	const { ciudad, provincia } = sequelize.models;
+	const { city, province } = sequelize.models;
 
-	provincia.hasMany(ciudad);
-	ciudad.belongsTo(provincia);
+	province.hasMany(city);
+	city.belongsTo(province);
 }
 
 module.exports = { applySchemaRelations };

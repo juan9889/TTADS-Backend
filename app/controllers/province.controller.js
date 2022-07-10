@@ -1,5 +1,5 @@
 const db = require("../models");
-const Provincia = db.provincias;
+const Province = db.province;
 const Op = db.Sequelize.Op;
 
 // Create and Save a new ciudad
@@ -18,7 +18,7 @@ exports.create = (req, res) => {
   };
 
   // Save Tutorial in the database
-  Provincia.create(provincia)
+  Province.create(provincia)
     .then(data => {
       res.send(data);
     })
@@ -35,7 +35,7 @@ exports.findAll = (req, res) => {
   const nombre = req.query.nombre;
   var condition = nombre ? { nombre: { [Op.like]: `%${nombre}%` } } : null;
 
-  Provincia.findAll({ where: condition })
+  Province.findAll({ where: condition })
     .then(data => {
       res.send(data);
     })
@@ -51,7 +51,7 @@ exports.findAll = (req, res) => {
 exports.findOne = (req, res) => {
   const id = req.params.id;
 
-  Provincia.findByPk(id)
+  Province.findByPk(id)
     .then(data => {
       if (data) {
         res.send(data);
@@ -72,7 +72,7 @@ exports.findOne = (req, res) => {
 exports.update = (req, res) => {
   const id = req.params.id;
 
-  Provincia.update(req.body, {
+  Province.update(req.body, {
     where: { id: id }
   })
     .then(num => {
@@ -97,7 +97,7 @@ exports.update = (req, res) => {
 exports.delete = (req, res) => {
   const id = req.params.id;
 
-  Provincia.destroy({
+  Province.destroy({
     where: { id: id }
   })
     .then(num => {

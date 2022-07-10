@@ -1,10 +1,10 @@
 const db = require("../models");
-const Ciudad = db.ciudades;
-const Provincia = db.provincias;
+const City = db.city;
+const Province = db.province;
 const Op = db.Sequelize.Op;
 
 // Create and Save a new ciudad
-exports.create = async (req, res) => {
+exports.create = (req, res) => {
   // Validate request
   if (!req.body.nombre) {
     res.status(400).send({
@@ -12,18 +12,14 @@ exports.create = async (req, res) => {
     });
     return;
   }
-
-
- 
  //var provincia =  await Provincia.findByPk(req.body.provincia).then( () => {console.log(provincia)});
-  
  //console.log(provincia);
   const ciudad = ({
-    nombre: req.body.nombre/*
+    name: req.body.nombre/*
     provincia : provincia,*/
   });
 
-  Ciudad.create(ciudad)
+  City.create(ciudad)
     .then(data => {
       res.send(data);
     })
@@ -40,7 +36,7 @@ exports.findAll = (req, res) => {
   const nombre = req.query.nombre;
   var condition = nombre ? { nombre: { [Op.like]: `%${nombre}%` } } : null;
 
-  Ciudad.findAll({ where: condition })
+  City.findAll({ where: condition })
     .then(data => {
       res.send(data);
     })
@@ -56,7 +52,7 @@ exports.findAll = (req, res) => {
 exports.findOne = (req, res) => {
   const id = req.params.id;
 
-  Ciudad.findByPk(id)
+  City.findByPk(id)
     .then(data => {
       if (data) {
         res.send(data);
@@ -77,7 +73,7 @@ exports.findOne = (req, res) => {
 exports.update = (req, res) => {
   const id = req.params.id;
 
-  Ciudad.update(req.body, {
+  City.update(req.body, {
     where: { id: id }
   })
     .then(num => {
@@ -102,7 +98,7 @@ exports.update = (req, res) => {
 exports.delete = (req, res) => {
   const id = req.params.id;
 
-  Ciudad.destroy({
+  City.destroy({
     where: { id: id }
   })
     .then(num => {
