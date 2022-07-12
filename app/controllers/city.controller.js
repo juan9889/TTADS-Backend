@@ -18,7 +18,6 @@ exports.create = (req, res) => {
     name: req.body.nombre/*
     provincia : provincia,*/
   });
-
   City.create(ciudad)
     .then(data => {
       res.send(data);
