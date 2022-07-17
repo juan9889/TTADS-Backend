@@ -1,23 +1,23 @@
 module.exports = app => {
-    const province = require("../controllers/province.controller.js");
+    const provinces = require("../controllers/province.controller.js");
   
     var router = require("express").Router();
   
     // Create a new Tutorial
-    router.post("/", province.create);
+    router.post("/", provinces.create);
   
     // Retrieve all Tutorials
-    router.get("/", province.findAll);
+    router.get("/", provinces.findAll);
   
     // Retrieve a single Tutorial with id
-    router.get("/:id", province.findOne);
+    router.get("/:id", provinces.findOne);
   
     // Update a Tutorial with id
-    router.put("/:id", province.update);
+    router.put("/:id", provinces.update);
   
     // Delete a Tutorial with id
-    router.delete("/:id", province.delete);
+    router.delete("/:id", provinces.delete);
   
-    app.use('/api/province', router);
+    app.use('/api/provinces', router);
   };
   

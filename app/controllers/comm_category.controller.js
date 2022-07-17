@@ -1,24 +1,20 @@
 const { Sequelize, Op } = require("sequelize");
 const sequelize = require("../database/database.js");
-const City = sequelize.models.City;
-const Province = sequelize.models.Province;
-
-
+const Comm_Category = sequelize.models.Comm_Category;
 
 // Create and Save a new ciudad
 exports.create = (req, res) => {
   // Validate request
-  if (!req.body.name || !req.body.provinceId) {
+  if (!req.body.name) {
     res.status(400).send({
-      message: "name or provinceId can not be empty!"
+      message: "name can not be empty!"
     });
     return
   }
-  const ciudad = ({
-    name: req.body.name,
-    provinceId: req.body.provinceId
+  const comm_category = ({
+    name: req.body.name
   });
-  City.create(ciudad)
+  Comm_Category.create(comm_category)
     .then(data => {
       res.status(201).send(data);
     })
@@ -42,7 +38,7 @@ exports.findAll = (req, res) => {
         res.status(200).send(data);
       }
       else {
-        res.status(404).send({ message: 'Cannot find'})
+        res.status(404).send({ message: 'Cannot find' })
       }
     })
     .catch(err => {
@@ -55,14 +51,14 @@ exports.findAll = (req, res) => {
 
 // Find a single ciudad with an id
 exports.findOne = (req, res) => {
-  if (!req.body.name || !req.body.provinceId) {
+  if (!req.body.name) {
     res.status(400).send({
       message: "id can not be empty!"
     });
     return
   }
   const id = req.params.id;
-  City.findByPk(id)
+  Comm_Category.findByPk(id)
     .then(data => {
       if (data) {
         res.status(200).send(data);
@@ -72,24 +68,24 @@ exports.findOne = (req, res) => {
         });
       }
     })
-    .catch (err => {
-    res.status(500).send({
-      message:
-        err.name + ': ' + err.message || "Error retrieving  with id=" + id
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.name + ': ' + err.message || "Error retrieving  with id=" + id
+      });
     });
-  });
 };
 
 // Update by the id in the request
 exports.update = (req, res) => {
-  if (!req.body.name || !req.body.provinceId) {
+  if (!req.body.name) {
     res.status(400).send({
       message: "id can not be empty!"
     });
     return
   }
   const id = req.params.id;
-  City.update(req.body, {
+  Comm_Category.update(req.body, {
     where: { id: id }
   })
     .then(num => {
@@ -99,9 +95,9 @@ exports.update = (req, res) => {
         });
       } else {
         res.status(502).send({
-          message: err.name + ': ' + err.message || `Cannot update ciudad with id = ${ id }.Maybe ciudad was not found or req.body is empty!`
+          message: err.name + ': ' + err.message || `Cannot update ciudad with id = ${id}.Maybe ciudad was not found or req.body is empty!`
         })
-      } 
+      }
     })
     .catch(err => {
       res.status(500).send({
@@ -112,7 +108,7 @@ exports.update = (req, res) => {
 
 // Delete a Tutorial with the specified id in the request
 exports.delete = (req, res) => {
-  if (!req.body.name || !req.body.provinceId) {
+  if (!req.body.name ) {
     res.status(400).send({
       message: "id can not be empty!"
     });
@@ -120,7 +116,7 @@ exports.delete = (req, res) => {
   }
   const id = req.params.id;
 
-  City.destroy({
+  Comm_Category.destroy({
     where: { id: id }
   })
     .then(num => {

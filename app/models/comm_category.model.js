@@ -1,5 +1,5 @@
 module.exports = (sequelize, Sequelize) => {
-  const City = sequelize.define("City", {
+  const Comm_Category = sequelize.define("Comm_Category", {
     id: {
       type: Sequelize.DataTypes.INTEGER,
       primaryKey: true,
@@ -9,5 +9,5 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.DataTypes.STRING
     }
   });
-  return City;
+  return Comm_Category;
 };
