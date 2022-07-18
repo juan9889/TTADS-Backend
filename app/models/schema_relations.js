@@ -12,32 +12,42 @@ function applySchemaRelations(sequelize) {
 	});
 	//community community_category
 	Comm_Category.hasMany(Community, {
-		foreignKey: 'catId',
+		foreignKey: 'categoryId',
 		sourceKey: 'id',
 		onDelete: 'RESTRICT'
 	});
 	Community.belongsTo(Comm_Category, {
-		foreignKey: 'catId',
+		foreignKey: 'categoryId',
 		targetId: 'id'
 	});
 	//event event_category
 	Event_Category.hasMany(Event, {
-		foreignKey: 'catId',
+		foreignKey: 'categoryId',
 		sourceKey: 'id',
 		onDelete: 'RESTRICT'
 	});
 	Event.belongsTo(Event_Category, {
-		foreignKey: 'catId',
+		foreignKey: 'categoryId',
 		targetId: 'id'
 	});
 	//event community
 	Community.hasMany(Event, {
-		foreignKey: 'eventId',
+		foreignKey: 'communityId',
 		sourceKey: 'id',
 		onDelete: 'RESTRICT'
 	});
 	Event.belongsTo(Community, {
-		foreignKey: 'eventId',
+		foreignKey: 'communityId',
+		targetId: 'id'
+	});
+	//Event City
+	City.hasMany(Event, {
+		foreignKey: 'cityId',
+		sourceKey: 'id',
+		onDelete: 'RESTRICT'
+	});
+	Event.belongsTo(City, {
+		foreignKey: 'cityId',
 		targetId: 'id'
 	})
 

@@ -17,5 +17,8 @@ module.exports = app => {
   // Delete a Tutorial with id
   router.delete("/:id", comm_category.delete);
 
+  //Retrive all communities in a category
+  router.get("/:id/communities", comm_category.findCategoryCommunities);
+
   app.use('/api/commcategory', router);
 };

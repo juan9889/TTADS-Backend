@@ -1,21 +1,33 @@
-const { Sequelize, Op } = require("sequelize");
+const { Sequelize, Op, QueryTypes } = require("sequelize");
 const sequelize = require("../database/database.js");
-const Comm_Category = sequelize.models.Comm_Category;
-const Community = sequelize.models.Communty;
+const Event = sequelize.models.Event
+const City = sequelize.models.City;
+const Category = sequelize.models.Event_Category;
+
+
 
 // Create and Save a new ciudad
 exports.create = (req, res) => {
   // Validate request
-  if (!req.body.name) {
+  if (!req.body.title || !req.body.description || !req.body.date
+    || !req.body.time || !req.body.place || !req.body.cityId
+    || !req.body.categoryId || !req.body.communityId) {
     res.status(400).send({
-      message: "name can not be empty!"
+      message: "title, description, date, time and place can not be empty!"
     });
     return
   }
-  const comm_category = ({
-    name: req.body.name
+  const event = ({
+    title: req.body.title,
+    description: req.body.description,
+    date: req.body.date,
+    time: req.body.time,
+    place: req.body.place,
+    cityId: req.body.cityId,
+    categoryId: req.body.categoryId,
+    communityId: req.body.communityId
   });
-  Comm_Category.create(comm_category)
+  Event.create(event)
     .then(data => {
       res.status(201).send(data);
     })
@@ -33,7 +45,7 @@ exports.findAll = (req, res) => {
   const name = req.query.name;
 
   var condition = name ? { name: { [Op.like]: `%${name}%` } } : null;
-  Comm_Category.findAll({ where: condition })
+  Event.findAll({ where: condition })
     .then(data => {
       if (data) {
         res.status(200).send(data);
@@ -59,7 +71,7 @@ exports.findOne = (req, res) => {
     return
   }
   const id = req.params.id;
-  Comm_Category.findByPk(id)
+  Event.findByPk(id)
     .then(data => {
       if (data) {
         res.status(200).send(data);
@@ -86,7 +98,7 @@ exports.update = (req, res) => {
     return
   }
   const id = req.params.id;
-  Comm_Category.update(req.body, {
+  City.update(req.body, {
     where: { id: id }
   })
     .then(num => {
@@ -109,7 +121,7 @@ exports.update = (req, res) => {
 
 // Delete a Tutorial with the specified id in the request
 exports.delete = (req, res) => {
-  if (!req.params.id ) {
+  if (!req.params.id) {
     res.status(400).send({
       message: "id can not be empty!"
     });
@@ -117,7 +129,7 @@ exports.delete = (req, res) => {
   }
   const id = req.params.id;
 
-  Comm_Category.destroy({
+  City.destroy({
     where: { id: id }
   })
     .then(num => {
@@ -138,29 +150,33 @@ exports.delete = (req, res) => {
     });
 };
 
-exports.findCategoryCommunities = (req, res) => {
+exports.GetDetails = (req, res) => {
   if (!req.params.id) {
     res.status(400).send({
       message: "id can not be empty!"
     });
     return
   }
-  const id = req.params.id;
-
-  var condition = id ? { categoryId: id } : null; //communities where column categoryid = id
-  Community.findAll({ where: condition })
+  const id = parseInt(req.params.id );
+  const query = 'SELECT e.id, e.title,e.description, e.cityId, ci.name "City", e.date, e.time ,e.communityId, c.name "community",e.categoryId,ec.name "category" FROM events e inner join communities c on e.communityId = c.id inner join event_categories ec on e.categoryId = ec.id inner join cities ci on e.cityId = ci.id  where e.id = :id'
+  sequelize.query(query, {
+    type: QueryTypes.SELECT,
+    replacements: {id: id}
+  })
     .then(data => {
       if (data) {
-        res.status(200).send(data);
-      }
-      else {
-        res.status(404).send({ message: 'Cannot find' })
-      }
-    })
+      console.log(data)
+      res.status(200).send(data);
+    } else {
+      res.status(404).send({
+        message: `Cannot find with id=${id}.`
+      });
+    }
+  })
     .catch(err => {
       res.status(500).send({
         message:
-          err.name + ': ' + err.message || "Some error occurred while retrieving "
+          err.name + ': ' + err.message || "Error retrieving  with id=" + id
       });
     });
 }

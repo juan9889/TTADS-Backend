@@ -55,7 +55,7 @@ exports.findAll = (req, res) => {
 
 // Find a single ciudad with an id
 exports.findOne = (req, res) => {
-  if (!req.body.name || !req.body.provinceId) {
+  if (!req.params.id) {
     res.status(400).send({
       message: "id can not be empty!"
     });
@@ -82,7 +82,7 @@ exports.findOne = (req, res) => {
 
 // Update by the id in the request
 exports.update = (req, res) => {
-  if (!req.body.name || !req.body.provinceId) {
+  if (!req.params.id) {
     res.status(400).send({
       message: "id can not be empty!"
     });
@@ -112,7 +112,7 @@ exports.update = (req, res) => {
 
 // Delete a Tutorial with the specified id in the request
 exports.delete = (req, res) => {
-  if (!req.body.name || !req.body.provinceId) {
+  if (!req.params.id) {
     res.status(400).send({
       message: "id can not be empty!"
     });

@@ -1,6 +1,7 @@
 const { Sequelize, Op } = require("sequelize");
 const sequelize = require("../database/database.js");
 const Province = sequelize.models.Province;
+const City = sequelize.models.City;
 
 // Create and Save a new ciudad
 exports.create = (req, res) => {
@@ -132,6 +133,33 @@ exports.delete = (req, res) => {
     .catch(err => {
       res.status(500).send({
         message: err.name + ': ' + err.message || "Could not delete provincia with id=" + id
+      });
+    });
+};
+
+exports.findCities = (req, res) => {
+  if (!req.params.id) {
+    res.status(400).send({
+      message: "id can not be empty!"
+    });
+    return
+  }
+  const id = req.params.id;
+
+  var condition = id ? { provinceId: id } : null;
+  City.findAll({ where: condition })
+    .then(data => {
+      if (data) {
+        res.status(200).send(data);
+      }
+      else {
+        res.status(404).send({ message: 'Cannot find' })
+      }
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.name + ': ' + err.message || "Some error occurred while retrieving "
       });
     });
 };

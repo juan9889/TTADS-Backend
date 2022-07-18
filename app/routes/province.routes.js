@@ -18,6 +18,9 @@ module.exports = app => {
     // Delete a Tutorial with id
     router.delete("/:id", provinces.delete);
   
+    // Retrieve a single Tutorial with id
+    router.get("/:id/cities", provinces.findCities);
+  
     app.use('/api/provinces', router);
   };
   

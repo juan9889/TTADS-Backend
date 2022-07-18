@@ -17,7 +17,7 @@ module.exports = (sequelize, Sequelize) => {
     time: {
       type: Sequelize.DataTypes.TIME
     },
-    place: {
+    state: {
       type: Sequelize.DataTypes.STRING
     }
   });

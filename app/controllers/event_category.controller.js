@@ -51,7 +51,7 @@ exports.findAll = (req, res) => {
 
 // Find a single ciudad with an id
 exports.findOne = (req, res) => {
-  if (!req.body.name) {
+  if (!req.params.id) {
     res.status(400).send({
       message: "id can not be empty!"
     });
@@ -78,7 +78,7 @@ exports.findOne = (req, res) => {
 
 // Update by the id in the request
 exports.update = (req, res) => {
-  if (!req.body.name) {
+  if (!req.params.id) {
     res.status(400).send({
       message: "id can not be empty!"
     });
@@ -91,24 +91,24 @@ exports.update = (req, res) => {
     .then(num => {
       if (num == 1) {
         res.status(200).send({
-          message: "ciudad was updated successfully."
+          message: "category was updated successfully."
         });
       } else {
         res.status(502).send({
-          message: err.name + ': ' + err.message || `Cannot update ciudad with id = ${id}.Maybe ciudad was not found or req.body is empty!`
+          message: err.name + ': ' + err.message || `Cannot update with id = ${id}.Maybe ciudad was not found or req.body is empty!`
         })
       }
     })
     .catch(err => {
       res.status(500).send({
-        message: err.name + ': ' + err.message || "Error updating ciudad with id=" + id
+        message: err.name + ': ' + err.message || "Error updating with id=" + id
       });
     });
 };
 
 // Delete a Tutorial with the specified id in the request
 exports.delete = (req, res) => {
-  if (!req.body.name) {
+  if (!req.params.id) {
     res.status(400).send({
       message: "id can not be empty!"
     });
@@ -122,7 +122,7 @@ exports.delete = (req, res) => {
     .then(num => {
       if (num == 1) {
         res.status(200).send({
-          message: "ciudad was deleted successfully!"
+          message: "category was deleted successfully!"
         });
       } else {
         res.status(502).send({
