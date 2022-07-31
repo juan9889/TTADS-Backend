@@ -1,5 +1,5 @@
 module.exports = (sequelize, Sequelize) => {
-  const Comm_Category = sequelize.define("Comm_Category", {
+  const comm_category = sequelize.define("comm_category", {
     id: {
       type: Sequelize.DataTypes.INTEGER,
       primaryKey: true,
@@ -8,6 +8,21 @@ module.exports = (sequelize, Sequelize) => {
     name: {
       type: Sequelize.DataTypes.STRING
     }
-  });
-  return Comm_Category;
+  }, {
+    scopes: {
+      communities(categoryId) {
+        return {
+          where: {
+            id: categoryId
+          },
+          include: {
+            model: sequelize.models.community,
+            required: true
+          }
+        }
+      }
+    }
+  }
+  );
+  return comm_category;
 };

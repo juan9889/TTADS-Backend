@@ -1,52 +1,52 @@
 function applySchemaRelations(sequelize) {
-	const { City, Province, Comm_Category, Event_Category, Community, Event } = sequelize.models;
+	const { city, province, comm_category, event_category, community, event } = sequelize.models;
 	//city province
-	Province.hasMany(City, {
+	province.hasMany(city, {
 		foreignKey: 'provinceId',
 		sourceKey: 'id',
 		onDelete: 'RESTRICT'
 	});
-	City.belongsTo(Province, {
+	city.belongsTo(province, {
 		foreignKey: 'provinceId',
 		targetId: 'id',
 	});
 	//community community_category
-	Comm_Category.hasMany(Community, {
+	comm_category.hasMany(community, {
 		foreignKey: 'categoryId',
 		sourceKey: 'id',
 		onDelete: 'RESTRICT'
 	});
-	Community.belongsTo(Comm_Category, {
+	community.belongsTo(comm_category, {
 		foreignKey: 'categoryId',
 		targetId: 'id'
 	});
 	//event event_category
-	Event_Category.hasMany(Event, {
+	event_category.hasMany(event, {
 		foreignKey: 'categoryId',
 		sourceKey: 'id',
 		onDelete: 'RESTRICT'
 	});
-	Event.belongsTo(Event_Category, {
+	event.belongsTo(event_category, {
 		foreignKey: 'categoryId',
 		targetId: 'id'
 	});
 	//event community
-	Community.hasMany(Event, {
+	community.hasMany(event, {
 		foreignKey: 'communityId',
 		sourceKey: 'id',
 		onDelete: 'RESTRICT'
 	});
-	Event.belongsTo(Community, {
+	event.belongsTo(community, {
 		foreignKey: 'communityId',
 		targetId: 'id'
 	});
-	//Event City
-	City.hasMany(Event, {
+	//event city
+	city.hasMany(event, {
 		foreignKey: 'cityId',
 		sourceKey: 'id',
 		onDelete: 'RESTRICT'
 	});
-	Event.belongsTo(City, {
+	event.belongsTo(city, {
 		foreignKey: 'cityId',
 		targetId: 'id'
 	})

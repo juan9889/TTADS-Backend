@@ -1,5 +1,5 @@
 module.exports = (sequelize, Sequelize) => {
-  const Community = sequelize.define("Community", {
+  const community = sequelize.define("community", {
     id: {
       type: Sequelize.DataTypes.INTEGER,
       primaryKey: true,
@@ -11,6 +11,31 @@ module.exports = (sequelize, Sequelize) => {
     description: {
       type: Sequelize.DataTypes.STRING
     }
+  },{
+    scopes: {
+      details(communityId) {
+        return {
+          where: {
+            id: communityId
+          },
+          include: {
+            model: sequelize.models.comm_category,
+            required: true
+          }
+        }
+      },
+      events(communityId) {
+        return {
+          where: {
+            id: communityId
+          },
+          include: {
+            model: sequelize.models.event,
+            required: true
+          }
+        }
+      }
+    }
   });
-  return Community;
+  return community;
 };

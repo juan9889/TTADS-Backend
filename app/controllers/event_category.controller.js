@@ -1,6 +1,6 @@
 const { Sequelize, Op } = require("sequelize");
 const sequelize = require("../database/database.js");
-const Event_Category = sequelize.models.Event_Category;
+const event_Category = sequelize.models.event_category;
 
 // Create and Save a new ciudad
 exports.create = (req, res) => {

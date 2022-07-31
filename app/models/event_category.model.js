@@ -1,5 +1,5 @@
 module.exports = (sequelize, Sequelize) => {
-  const Event_Category = sequelize.define("Event_Category", {
+  const event_category = sequelize.define("event_category", {
     id: {
       type: Sequelize.DataTypes.INTEGER,
       primaryKey: true,
@@ -9,5 +9,5 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.DataTypes.STRING
     }
   });
-  return Event_Category;
+  return event_category;
 };

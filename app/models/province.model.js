@@ -1,5 +1,5 @@
 module.exports = (sequelize, Sequelize) => {
-  const Province = sequelize.define("Province", {
+  const province = sequelize.define("province", {
     id: {
       type: Sequelize.DataTypes.INTEGER,
       primaryKey: true,
@@ -8,6 +8,20 @@ module.exports = (sequelize, Sequelize) => {
     name: {
       type: Sequelize.DataTypes.STRING
     }
-    });
-  return Province;
+  }, {
+    scopes: {
+      cities(provinceId) {
+        return {
+          where: {
+            id: provinceId
+          },
+          include: {
+            model: sequelize.models.city,
+            required: true
+          }
+        }
+      }
+    }
+  });
+  return province;
   };

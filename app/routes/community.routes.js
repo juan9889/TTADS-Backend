@@ -1,5 +1,5 @@
 module.exports = app => {
-  const Communities = require("../controllers/city.controller.js");
+  const Communities = require("../controllers/community.controller.js");
 
   var router = require("express").Router();
 
@@ -18,9 +18,9 @@ module.exports = app => {
   // Delete a Tutorial with id
   router.delete("/:id", Communities.delete); 
 
-  router.get("/:id/events", Communities.findCommunityEvents);
+  router.get("/:id/events", Communities.findEvents);
 
-  router.get("/:id/details", Communities.GetDetails);
+  router.get("/:id/details", Communities.getDetails);
 
   app.use('/api/communities', router);
 };

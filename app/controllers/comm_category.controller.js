@@ -1,7 +1,7 @@
 const { Sequelize, Op } = require("sequelize");
 const sequelize = require("../database/database.js");
-const Comm_Category = sequelize.models.Comm_Category;
-const Community = sequelize.models.Communty;
+const Comm_Category = sequelize.models.comm_category;
+const Community = sequelize.models.community;
 
 // Create and Save a new ciudad
 exports.create = (req, res) => {
@@ -138,17 +138,16 @@ exports.delete = (req, res) => {
     });
 };
 
-exports.findCategoryCommunities = (req, res) => {
+exports.findCommunities = (req, res) => {
   if (!req.params.id) {
     res.status(400).send({
       message: "id can not be empty!"
     });
     return
   }
-  const id = req.params.id;
 
-  var condition = id ? { categoryId: id } : null; //communities where column categoryid = id
-  Community.findAll({ where: condition })
+  const id = parseInt(req.params.id);
+  Comm_Category.scope({ method: ['communities', id] }).findAll()
     .then(data => {
       if (data) {
         res.status(200).send(data);

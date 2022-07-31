@@ -18,7 +18,7 @@ module.exports = app => {
   router.delete("/:id", comm_category.delete);
 
   //Retrive all communities in a category
-  router.get("/:id/communities", comm_category.findCategoryCommunities);
+  router.get("/:id/communities", comm_category.findCommunities);
 
   app.use('/api/commcategory', router);
 };

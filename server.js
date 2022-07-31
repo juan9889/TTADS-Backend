@@ -10,10 +10,11 @@ app.use(express.urlencoded({ extended: true }));
 
 //Routes
 require("./app/routes/city.routes.js")(app);
-require("./app/routes/province.routes.js")(app);
 require("./app/routes/comm_category.routes.js")(app);
+require("./app/routes/community.routes.js")(app)
 require("./app/routes/event_category.routes.js")(app);
 require("./app/routes/event.routes.js")(app);
+require("./app/routes/province.routes.js")(app);
 
 //Sequelize
 sequelize = require("./app/database/database.js");

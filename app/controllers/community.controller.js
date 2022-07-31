@@ -1,22 +1,23 @@
 const { Sequelize, Op } = require("sequelize");
 const sequelize = require("../database/database.js");
-const Event = sequelize.models.Event;
-const Community = sequelize.models.Community;
+const Event = sequelize.models.event;
+const Community = sequelize.models.community;
 
 
 
 // Create and Save a new ciudad
 exports.create = (req, res) => {
   // Validate request
-  if (!req.body.name || !req.body.description) {
+  if (!req.body.name || !req.body.description || !req.body.categoryId) {
     res.status(400).send({
-      message: "name or description can not be empty!"
+      message: "name description or categoryId can not be empty!"
     });
     return
   }
   const community = ({
     name: req.body.name,
-    description: req.body.description
+    description: req.body.description,
+    categoryId: req.body.categoryId
   });
   Community.create(community)
     .then(data => {
@@ -140,20 +141,16 @@ exports.delete = (req, res) => {
       });
     });
 };
-exports.GetDetails = (req, res) => {
+
+exports.getDetails = (req, res) => {
   if (!req.params.id) {
     res.status(400).send({
       message: "id can not be empty!"
     });
     return
   }
-
   const id = parseInt(req.params.id);
-  const query = 'SELECT '
-  sequelize.query(query, {
-    type: QueryTypes.SELECT,
-    replacements: { id: id }
-  })
+  Community.scope({ method: ['details', id] }).findAll()
     .then(data => {
       if (data) {
         console.log(data)
@@ -171,17 +168,16 @@ exports.GetDetails = (req, res) => {
       });
     });
 }
-exports.findCommunityEvents = (req, res) => {
+
+exports.findEvents = (req, res) => {
   if (!req.params.id) {
     res.status(400).send({
       message: "id can not be empty!"
     });
     return
   }
-  const id = req.params.id;
-
-  var condition = id ? { categoryId: id } : null; //communities where column categoryid = id
-  Event.findAll({ where: condition })
+  const id = parseInt(req.params.id);
+  Community.scope({ method: ['events', id] }).findAll()
     .then(data => {
       if (data) {
         res.status(200).send(data);

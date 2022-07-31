@@ -1,7 +1,7 @@
 const { Sequelize, Op } = require("sequelize");
 const sequelize = require("../database/database.js");
-const Province = sequelize.models.Province;
-const City = sequelize.models.City;
+const Province = sequelize.models.province;
+const City = sequelize.models.city;
 
 // Create and Save a new ciudad
 exports.create = (req, res) => {
@@ -144,10 +144,9 @@ exports.findCities = (req, res) => {
     });
     return
   }
-  const id = req.params.id;
 
-  var condition = id ? { provinceId: id } : null;
-  City.findAll({ where: condition })
+  const id = parseInt(req.params.id);
+  Province.scope({ method: ['cities', id] }).findAll()
     .then(data => {
       if (data) {
         res.status(200).send(data);

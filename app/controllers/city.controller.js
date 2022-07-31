@@ -1,7 +1,7 @@
 const { Sequelize, Op } = require("sequelize");
 const sequelize = require("../database/database.js");
-const City = sequelize.models.City;
-const Province = sequelize.models.Province;
+const City = sequelize.models.city;
+const Province = sequelize.models.province;
 
 
 
