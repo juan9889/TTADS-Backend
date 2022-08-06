@@ -37,7 +37,13 @@ exports.findAll = (req, res) => {
   const name = req.query.name;
 
   var condition = name ? { name: { [Op.like]: `%${name}%` } } : null;
-  Community.findAll({ where: condition })
+  Community.findAll({
+    where: condition,
+    include: {
+      model: sequelize.models.comm_category,
+      required: true
+    }
+  })
     .then(data => {
       if (data) {
         res.status(200).send(data);
