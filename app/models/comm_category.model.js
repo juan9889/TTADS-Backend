@@ -17,7 +17,11 @@ module.exports = (sequelize, Sequelize) => {
           },
           include: {
             model: sequelize.models.community,
-            required: true
+            required: true,
+            include: {
+              model: sequelize.models.comm_category,
+              required: true
+            }
           }
         }
       }
