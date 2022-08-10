@@ -13,7 +13,9 @@ exports.create = (req, res) => {
     return
   }
   const comm_category = ({
-    name: req.body.name
+    name: req.body.name,
+    icon: req.body.icon,
+    iconColor: req.body.iconColor
   });
   Comm_Category.create(comm_category)
     .then(data => {
@@ -109,7 +111,7 @@ exports.update = (req, res) => {
 
 // Delete a Tutorial with the specified id in the request
 exports.delete = (req, res) => {
-  if (!req.params.id ) {
+  if (!req.params.id) {
     res.status(400).send({
       message: "id can not be empty!"
     });

@@ -18,6 +18,7 @@ exports.create = (req, res) => {
   console.log(req.body.date)
   const event = ({
     title: req.body.title,
+    place: req.body.place,
     description: req.body.description,
     date: req.body.date,
     state: req.body.state,
@@ -157,7 +158,7 @@ exports.GetDetails = (req, res) => {
     return
   }
   const id = parseInt(req.params.id);
-  Event.scope({ method: ['details',id]}).findAll()
+  Event.scope({ method: ['details', id] }).findAll()
     .then(data => {
       if (data) {
         console.log(data)

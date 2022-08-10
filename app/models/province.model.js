@@ -10,7 +10,7 @@ module.exports = (sequelize, Sequelize) => {
     }
   }, {
     scopes: {
-      cities(provinceId) {
+      cities (provinceId) {
         return {
           where: {
             id: provinceId
@@ -24,4 +24,4 @@ module.exports = (sequelize, Sequelize) => {
     }
   });
   return province;
-  };
+};

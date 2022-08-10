@@ -12,7 +12,9 @@ exports.create = (req, res) => {
     return
   }
   const event_category = ({
-    name: req.body.name
+    name: req.body.name,
+    icon: req.body.icon,
+    iconColor: req.body.iconColor
   });
   Event_Category.create(event_category)
     .then(data => {
