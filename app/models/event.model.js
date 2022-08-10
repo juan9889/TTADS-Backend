@@ -7,6 +7,9 @@ module.exports = (sequelize, Sequelize) => {
     },
     title: {
       type: Sequelize.DataTypes.STRING
+    },    
+    place: {
+    type: Sequelize.DataTypes.STRING
     },
     description: {
       type: Sequelize.DataTypes.STRING
@@ -23,6 +26,34 @@ module.exports = (sequelize, Sequelize) => {
   }, {
     scopes: {
       details(eventId) {
+        return {
+          where: {
+            id: eventId
+          },
+          include: [
+            {
+              model: sequelize.models.community,
+              // as: 'community',
+              required: true
+            },
+            {
+              model: sequelize.models.event_category,
+              // as: 'category',
+              required: true
+            },
+            {
+              model: sequelize.models.city,
+              // as: 'city',
+              required: true,
+              include: {
+                model: sequelize.models.province,
+                required: true
+              }
+            },
+          ]
+        }
+      },
+      allDetails() {
         return {
           include: [
             {

@@ -11,7 +11,7 @@ module.exports = (sequelize, Sequelize) => {
     description: {
       type: Sequelize.DataTypes.STRING
     }
-  },{
+  }, {
     scopes: {
       details(communityId) {
         return {
@@ -29,10 +29,37 @@ module.exports = (sequelize, Sequelize) => {
           where: {
             id: communityId
           },
-          include: {
-            model: sequelize.models.event,
-            required: true
-          }
+          include: [
+            {
+              model: sequelize.models.event,
+              required: true,
+              include: [
+                {
+                  model: sequelize.models.community,
+                  // as: 'community',
+                  required: true
+                },
+                {
+                  model: sequelize.models.event_category,
+                  // as: 'category',
+                  required: true
+                },
+                {
+                  model: sequelize.models.city,
+                  // as: 'city',
+                  required: true,
+                  include: {
+                    model: sequelize.models.province,
+                    required: true
+                  }
+                },
+              ]
+            },
+            {
+              model: sequelize.models.comm_category,
+              required: true
+            }
+          ]
         }
       }
     }

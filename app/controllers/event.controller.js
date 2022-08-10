@@ -175,3 +175,22 @@ exports.GetDetails = (req, res) => {
       });
     });
 }
+exports.GetAllDetails = (req, res) => {
+  Event.scope('allDetails').findAll()
+    .then(data => {
+      if (data) {
+        console.log(data)
+        res.status(200).send(data);
+      } else {
+        res.status(404).send({
+          message: `Cannot find with id=${id}.`
+        });
+      }
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.name + ': ' + err.message || "Error retrieving  with id=" + id
+      });
+    });
+}

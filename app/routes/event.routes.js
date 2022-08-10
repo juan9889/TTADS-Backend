@@ -6,7 +6,7 @@ module.exports = app => {
   router.post("/", event.create);
 
   // Retrieve all Tutorials
-  router.get("/", event.findAll);
+  router.get("/", event.GetAllDetails);
 
   // Retrieve a single Tutorial with id
   router.get("/:id", event.findOne);

@@ -10,7 +10,7 @@ module.exports = app => {
   router.get("/", Communities.findAll);
 
   // Retrieve a single Tutorial with id
-  router.get("/:id", Communities.findOne);
+  router.get("/:id", Communities.getDetails);
 
   // Update a Tutorial with id
   router.put("/:id", Communities.update);
@@ -19,8 +19,6 @@ module.exports = app => {
   router.delete("/:id", Communities.delete); 
 
   router.get("/:id/events", Communities.findEvents);
-
-  router.get("/:id/details", Communities.getDetails);
 
   app.use('/api/communities', router);
 };

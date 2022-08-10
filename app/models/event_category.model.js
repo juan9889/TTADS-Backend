@@ -7,7 +7,13 @@ module.exports = (sequelize, Sequelize) => {
     },
     name: {
       type: Sequelize.DataTypes.STRING
-    }
+    },
+    icon: {
+      type: Sequelize.DataTypes.STRING
+    },
+    iconColor: {
+      type: Sequelize.DataTypes.STRING
+    },
   });
   return event_category;
 };
