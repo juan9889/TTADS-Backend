@@ -13,14 +13,15 @@ module.exports = (sequelize, Sequelize) => {
     }
   }, {
     scopes: {
-      details(communityId) {
+      findOne(communityId) {
         return {
           where: {
             id: communityId
           },
           include: {
             model: sequelize.models.comm_category,
-            required: true
+            required: true,
+            attributes: ['id', 'name', 'icon', 'iconColor']
           }
         }
       },
@@ -36,28 +37,25 @@ module.exports = (sequelize, Sequelize) => {
               include: [
                 {
                   model: sequelize.models.community,
-                  // as: 'community',
-                  required: true
+                  required: true,
+                  attributes: ['name', 'id']
                 },
                 {
                   model: sequelize.models.event_category,
-                  // as: 'category',
-                  required: true
+                  required: true,
+                  attributes: ['name', 'icon', 'iconColor']
                 },
                 {
                   model: sequelize.models.city,
-                  // as: 'city',
                   required: true,
+                  attributes: ['name'],
                   include: {
                     model: sequelize.models.province,
-                    required: true
+                    required: true,
+                    attributes: ['name']
                   }
-                },
-              ]
-            },
-            {
-              model: sequelize.models.comm_category,
-              required: true
+                }
+              ],
             }
           ]
         }

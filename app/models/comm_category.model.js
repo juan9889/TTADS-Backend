@@ -26,7 +26,8 @@ module.exports = (sequelize, Sequelize) => {
             required: true,
             include: {
               model: sequelize.models.comm_category,
-              required: true
+              required: true,
+              attributes: ['id', 'name','icon', 'iconColor']
             }
           }
         }

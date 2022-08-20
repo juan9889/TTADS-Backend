@@ -68,10 +68,11 @@ exports.findOne = (req, res) => {
     });
     return
   }
-  const id = req.params.id;
-  Community.findByPk(id)
+  const id = parseInt(req.params.id);
+  Community.scope({ method: ['findOne', id] }).findAll()
     .then(data => {
       if (data) {
+        console.log(data)
         res.status(200).send(data);
       } else {
         res.status(404).send({
@@ -147,33 +148,6 @@ exports.delete = (req, res) => {
       });
     });
 };
-
-exports.getDetails = (req, res) => {
-  if (!req.params.id) {
-    res.status(400).send({
-      message: "id can not be empty!"
-    });
-    return
-  }
-  const id = parseInt(req.params.id);
-  Community.scope({ method: ['details', id] }).findAll()
-    .then(data => {
-      if (data) {
-        console.log(data)
-        res.status(200).send(data);
-      } else {
-        res.status(404).send({
-          message: `Cannot find with id=${id}.`
-        });
-      }
-    })
-    .catch(err => {
-      res.status(500).send({
-        message:
-          err.name + ': ' + err.message || "Error retrieving  with id=" + id
-      });
-    });
-}
 
 exports.findEvents = (req, res) => {
   if (!req.params.id) {

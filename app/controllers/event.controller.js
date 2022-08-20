@@ -41,39 +41,10 @@ exports.create = (req, res) => {
 
 // Retrieve all ciudades from the database.
 exports.findAll = (req, res) => {
-
-  const name = req.query.name;
-
-  var condition = name ? { name: { [Op.like]: `%${name}%` } } : null;
-  Event.findAll({ where: condition })
+  Event.scope('findAll').findAll()
     .then(data => {
       if (data) {
-        res.status(200).send(data);
-      }
-      else {
-        res.status(404).send({ message: 'Cannot find' })
-      }
-    })
-    .catch(err => {
-      res.status(500).send({
-        message:
-          err.name + ': ' + err.message || "Some error occurred while retrieving "
-      });
-    });
-};
-
-// Find a single ciudad with an id
-exports.findOne = (req, res) => {
-  if (!req.params.id) {
-    res.status(400).send({
-      message: "id can not be empty!"
-    });
-    return
-  }
-  const id = req.params.id;
-  Event.findByPk(id)
-    .then(data => {
-      if (data) {
+        console.log(data)
         res.status(200).send(data);
       } else {
         res.status(404).send({
@@ -89,7 +60,33 @@ exports.findOne = (req, res) => {
     });
 };
 
-// Update by the id in the request
+exports.findOne = (req, res) => {
+  if(!req.params.id) {
+    res.status(400).send({
+      message: "id can not be empty!"
+    });
+    return
+  }
+  const id = parseInt(req.params.id);
+  Event.scope({ method: ['findOne', id] }).findAll()
+    .then(data => {
+      if (data) {
+        console.log(data)
+        res.status(200).send(data);
+      } else {
+        res.status(404).send({
+          message: `Cannot find with id=${id}.`
+        });
+      }
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.name + ': ' + err.message || "Error retrieving  with id=" + id
+      });
+    });
+};
+
 exports.update = (req, res) => {
   if (!req.params.id) {
     res.status(400).send({
@@ -119,7 +116,6 @@ exports.update = (req, res) => {
     });
 };
 
-// Delete a Tutorial with the specified id in the request
 exports.delete = (req, res) => {
   if (!req.params.id) {
     res.status(400).send({
@@ -149,49 +145,3 @@ exports.delete = (req, res) => {
       });
     });
 };
-
-exports.GetDetails = (req, res) => {
-  if (!req.params.id) {
-    res.status(400).send({
-      message: "id can not be empty!"
-    });
-    return
-  }
-  const id = parseInt(req.params.id);
-  Event.scope({ method: ['details', id] }).findAll()
-    .then(data => {
-      if (data) {
-        console.log(data)
-        res.status(200).send(data);
-      } else {
-        res.status(404).send({
-          message: `Cannot find with id=${id}.`
-        });
-      }
-    })
-    .catch(err => {
-      res.status(500).send({
-        message:
-          err.name + ': ' + err.message || "Error retrieving  with id=" + id
-      });
-    });
-}
-exports.GetAllDetails = (req, res) => {
-  Event.scope('allDetails').findAll()
-    .then(data => {
-      if (data) {
-        console.log(data)
-        res.status(200).send(data);
-      } else {
-        res.status(404).send({
-          message: `Cannot find with id=${id}.`
-        });
-      }
-    })
-    .catch(err => {
-      res.status(500).send({
-        message:
-          err.name + ': ' + err.message || "Error retrieving  with id=" + id
-      });
-    });
-}

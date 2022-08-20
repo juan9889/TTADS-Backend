@@ -25,7 +25,7 @@ module.exports = (sequelize, Sequelize) => {
     }
   }, {
     scopes: {
-      details(eventId) {
+      findOne(eventId) {
         return {
           where: {
             id: eventId
@@ -33,17 +33,14 @@ module.exports = (sequelize, Sequelize) => {
           include: [
             {
               model: sequelize.models.community,
-              // as: 'community',
               required: true
             },
             {
               model: sequelize.models.event_category,
-              // as: 'category',
               required: true
             },
             {
               model: sequelize.models.city,
-              // as: 'city',
               required: true,
               include: {
                 model: sequelize.models.province,
@@ -53,26 +50,28 @@ module.exports = (sequelize, Sequelize) => {
           ]
         }
       },
-      allDetails() {
+      findAll() {
         return {
+          attributes:['id','title','date'],
           include: [
             {
               model: sequelize.models.community,
-              // as: 'community',
-              required: true
+              required: true,
+              attributes:['name','id']              
             },
             {
               model: sequelize.models.event_category,
-              // as: 'category',
-              required: true
+              required: true,
+              attributes: ['name', 'icon', 'iconColor']              
             },
             {
               model: sequelize.models.city,
-              // as: 'city',
               required: true,
+              attributes:['name'],
               include: {
                 model: sequelize.models.province,
-                required: true
+                required: true,
+                attributes:['name']                
               }
             },
           ]

@@ -10,7 +10,7 @@ module.exports = app => {
   router.get("/", Communities.findAll);
 
   // Retrieve a single Tutorial with id
-  router.get("/:id", Communities.getDetails);
+  router.get("/:id", Communities.findOne);
 
   // Update a Tutorial with id
   router.put("/:id", Communities.update);

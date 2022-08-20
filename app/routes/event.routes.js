@@ -6,7 +6,7 @@ module.exports = app => {
   router.post("/", event.create);
 
   // Retrieve all Tutorials
-  router.get("/", event.GetAllDetails);
+  router.get("/", event.findAll);
 
   // Retrieve a single Tutorial with id
   router.get("/:id", event.findOne);
@@ -16,9 +16,6 @@ module.exports = app => {
 
   // Delete a Tutorial with id
   router.delete("/:id", event.delete); 
-
-  // Retrieve a single Tutorial with id
-  router.get("/:id/details", event.GetDetails);
 
   app.use('/api/events', router);
 };
