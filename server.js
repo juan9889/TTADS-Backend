@@ -30,7 +30,7 @@ const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}.`);
   //metodo para llenar bd con datos de prueba si esta vacia
-  sleep(2000).then(() => { fillTestData(); });
+  sleep(5000).then(() => { fillTestData(); });
 });
 
 function sleep(ms) {
