@@ -37,7 +37,7 @@ exports.fillData = async() => {
         await Province.create(provincia);
         console.log('Creando ciudades...');
         ciudad = ({
-            name: 'Rosario',
+            name: 'Venado Tuerto',
             provinceId: 1
           });
         await City.create(ciudad);
@@ -170,6 +170,18 @@ exports.fillData = async() => {
           cityId: 2,
           categoryId: 2,
           communityId: 5
+        });
+        await Event.create(event_crear);
+        event_crear = ({
+          title: 'Repaso para el parcial',
+          place: 'Bar de la facu',
+          description: 'Nos juntamos a repasar para el parcial de mañana',
+          date: Date.now(),
+          state: 'Pendiente',
+          time: '23:00',
+          cityId: 2,
+          categoryId: 1,
+          communityId: 1
         });
         await Event.create(event_crear);
         console.log('Datos de prueba creados');
