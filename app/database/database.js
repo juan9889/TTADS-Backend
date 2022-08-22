@@ -27,3 +27,4 @@ require("../models/community.model.js")(sequelize, Sequelize);
 applySchemaRelations(sequelize);
 
 module.exports = sequelize;
+console.log('Aber aca');

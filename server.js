@@ -1,5 +1,7 @@
 const express = require("express");
 const cors = require("cors");
+const dbConfig = require("./app/config/db.config.js");
+const testdata = require("./app/config/test_data.js");
 const app = express();
 var corsOptions = {
   origin: "*"
@@ -27,4 +29,15 @@ app.get("/", (req, res) => {
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}.`);
+  //metodo para llenar bd con datos de prueba si esta vacia
+  sleep(2000).then(() => { fillTestData(); });
 });
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function fillTestData() {
+  console.log('Metodo para llenar datos de prueba');
+  await testdata.fillData();
+}
