@@ -73,6 +73,6 @@ Comunidad UTN. Un usuario puede crear un evento cuando se dan charlas, conferenc
 
 **Tecnologías:**
 - Back: Node.js Api Rest
-- Base de datos: SQL
-- Front: React o Vue (NuxtJS)
-- CSS: Fomantinc
+- Base de datos: Mysql con Sequelize
+- Front: NuxtJS
+- CSS: Vuetify
