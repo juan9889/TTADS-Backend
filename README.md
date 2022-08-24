@@ -7,6 +7,11 @@ TP de backend TTADS 2022
 - Cristian Gofiar 44839
 ## Enunciado:
 
+#Ejecutar
+
+npm run dev
+levantar el front con el mismo comando https://github.com/juan9889/ttads-frontend
+
 ### Enunciado general:
 Un sistema que pueda reunir personas con un mismo interés creando eventos dentro de comunidades. 
 
