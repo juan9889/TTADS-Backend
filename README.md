@@ -1,13 +1,17 @@
 # TTADS-Backend
 TP de backend TTADS 2022
 
+<a href="">
+  <img src="https://github.com/juan9889/TTADS-Backend/actions/workflows/build.yml/badge.svg" width="15%">
+</a>
+
 ### Integrantes:
 - Gino Bartolucci 47024
 - Juan Agustin Fogliato 43724
 - Cristian Gofiar 44839
 ## Enunciado:
 
-#Ejecutar
+### Ejecutar
 
 npm run dev
 levantar el front con el mismo comando https://github.com/juan9889/ttads-frontend
