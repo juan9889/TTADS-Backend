@@ -19,5 +19,18 @@ jobs:
         run: npm run build --if-present
       - name: Tests
         run: echo No escribimos ninguna prueba xd
+  deploy:
+    name: Deploy
+    runs-on: windows-latest
+    needs: build
+    steps:
+      - name: Deploy to server
+        uses: garygrossgarten/github-action-ssh@release
+        with:
+          command: /home/comunidades/backend_deploy
+          host: ${{ secrets.PRODUCTION_HOST }}
+          username: root
+          password: ${{ secrets.PRODUCTION_ROOT_PASSWORD }}
+          port: ${{ secrets.PRODUCTION_SSH_PORT }}
         
         
