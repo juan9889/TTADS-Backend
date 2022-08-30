@@ -27,7 +27,7 @@ jobs:
       - name: Deploy to server
         uses: garygrossgarten/github-action-ssh@release
         with:
-          command: sh ./home/comunidades/test_script.sh
+          command: sh /home/comunidades/test_script.sh
           host: ${{ secrets.PRODUCTION_HOST }}
           username: root
           password: ${{ secrets.PRODUCTION_ROOT_PASSWORD }}
