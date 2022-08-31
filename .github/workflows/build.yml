@@ -29,8 +29,8 @@ jobs:
         with:
           command: sh /home/comunidades/backend_deploy.sh
           host: ${{ secrets.PRODUCTION_HOST }}
-          username: root
-          password: ${{ secrets.PRODUCTION_ROOT_PASSWORD }}
+          username: ${{ secrets.DEPLOY_USER }}
+          password: ${{ secrets.DEPLOY_USER_PASSWORD }}
           port: ${{ secrets.PRODUCTION_SSH_PORT }}
         
         
