@@ -88,6 +88,35 @@ exports.findOne = (req, res) => {
     });
 };
 
+// Find communities by search term
+exports.findByTerm = (req, res) => {
+  if (!req.params.term) {
+    res.status(400).send({
+      message: "search term empty"
+    });
+    return
+  }
+  const term = parseInt(req.params.term);
+  console.log('Req parm :' + req.params.term);
+  Community.scope({ method: ['findByTerm', req.params.term] }).findAll()
+    .then(data => {
+      if (data) {
+        console.log(data)
+        res.status(200).send(data);
+      } else {
+        res.status(404).send({
+          message: `Cannot find`
+        });
+      }
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.name + ': ' + err.message || "Error retrieving  with search term"
+      });
+    });
+};
+
 // Update by the id in the request
 exports.update = (req, res) => {
   if (!req.params.id) {

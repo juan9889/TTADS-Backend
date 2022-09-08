@@ -25,6 +25,27 @@ module.exports = (sequelize, Sequelize) => {
           }
         }
       },
+      findByTerm(term) {
+        const { Op } = require("sequelize");
+        console.log('Term : ' + term);
+        return {
+          where: {
+            [Op.or]: [
+              { name: {
+                [Op.substring]: term,
+              }, },
+              { description: {
+                [Op.substring]: term,
+              }, },
+            ]
+          },
+          include: {
+            model: sequelize.models.comm_category,
+            required: true,
+            attributes: ['id', 'name', 'icon', 'iconColor']
+          }
+        }
+      },
       events(communityId) {
         return {
           where: {
