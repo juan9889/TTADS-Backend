@@ -9,7 +9,7 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.DataTypes.STRING
     },    
     place: {
-    type: Sequelize.DataTypes.STRING
+      type: Sequelize.DataTypes.STRING
     },
     description: {
       type: Sequelize.DataTypes.STRING
@@ -57,7 +57,7 @@ module.exports = (sequelize, Sequelize) => {
             {
               model: sequelize.models.community,
               required: true,
-              attributes:['name','id']              
+              attributes:['name','id', 'place', 'description', 'date', 'time', 'state']              
             },
             {
               model: sequelize.models.event_category,
