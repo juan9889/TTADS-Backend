@@ -52,26 +52,26 @@ module.exports = (sequelize, Sequelize) => {
       },
       findAll() {
         return {
-          attributes:['id','title','date'],
+          attributes:['id','title','date', 'place', 'description', 'time', 'state'],
           include: [
             {
               model: sequelize.models.community,
               required: true,
-              attributes:['name','id', 'place', 'description', 'date', 'time', 'state']              
+              attributes:['name','id']              
             },
             {
               model: sequelize.models.event_category,
               required: true,
-              attributes: ['name', 'icon', 'iconColor']              
+              attributes: ['name','id', 'icon', 'iconColor']              
             },
             {
               model: sequelize.models.city,
               required: true,
-              attributes:['name'],
+              attributes:['name','id'],
               include: {
                 model: sequelize.models.province,
                 required: true,
-                attributes:['name']                
+                attributes:['name','id']                
               }
             },
           ]

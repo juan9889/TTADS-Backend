@@ -64,16 +64,16 @@ module.exports = (sequelize, Sequelize) => {
                 {
                   model: sequelize.models.event_category,
                   required: true,
-                  attributes: ['name', 'icon', 'iconColor']
+                  attributes: ['name','id', 'icon', 'iconColor']
                 },
                 {
                   model: sequelize.models.city,
                   required: true,
-                  attributes: ['name'],
+                  attributes: ['name','id'],
                   include: {
                     model: sequelize.models.province,
                     required: true,
-                    attributes: ['name']
+                    attributes: ['name','id']
                   }
                 }
               ],
