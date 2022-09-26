@@ -3,76 +3,55 @@ const sequelize = require("../database/database.js");
 const Province = sequelize.models.province;
 const City = sequelize.models.city;
 
-// Create and Save a new ciudad
-exports.create = (req, res) => {
-  if (!req.body.name) {
-    res.status(400).send({
-      message: "Content can not be empty!"
-    });
-    return;
-  }
-  const provincia = {
-    name: req.body.name
-  };
-  Province.create(provincia)
-    .then(data => {
-      res.status(201).send(data);
-    })
-    .catch(err => {
-      res.status(500).send({
-        message:
-          err.name + ': ' + err.message || "Some error occurred while creating "
+// Create and Save a new provincia.
+exports.create = async (req, res) => {
+  try {
+    if (!req.body.name) {
+      res.status(400).send({
+        message: "Content can not be empty!"
       });
-    });
+      return
+    };
+    await Province.create({ name: req.body.name });
+    res.status(201).send({ message: 'Created', data: req.body, status: 201 });
+  } catch (error) {
+    res.status(500).send({ message: error.name + error.message });
+  }
 };
 
-// Retrieve all ciudades from the database.
-exports.findAll = (req, res) => {
-  const name = req.query.name;
-  var condition = name ? { name: { [Op.like]: `%${name}%` } } : null;
 
-  Province.findAll({ where: condition })
-    .then(data => {
-      if (data) {
-        res.status(200).send(data);
-      }
-      else {
-        res.status(404).send({ message: 'Cannot find' })
-      }
-    })
-    .catch(err => {
-      res.status(500).send({
-        message:
-          err.name + ': ' + err.message || "Some error occurred while retrieving "
-      });
-    });
+// Retrieve all ciudades from the database.
+exports.findAll = async (req, res) => {
+  try {
+    const name = req.query.name;
+    var province = await Province.findAll({ where: name ? { name: { [Op.like]: `%${name}%` } } : null });
+    if (province) {
+      res.status(200).send({ message: 'All provinces found', data: province, status: 200 });
+    } else {
+      res.status(404).send({ message: 'Cannot find' });
+    }
+  } catch (error) {
+    res.status(500).send({ message: error.name + error.message });
+  }
 };
 
 // Find a single ciudad with an id
-exports.findOne = (req, res) => {
-  if (!req.params.id) {
-    res.status(400).send({
-      message: "id can not be empty!"
-    });
-    return
-  }
-  const id = req.params.id;
-
-  Province.findByPk(id)
-    .then(data => {
-      if (data) {
-        res.status(200).send(data);
-      } else {
-        res.status(404).send({
-          message: `Cannot find with id=${id}.`
-        });
-      }
-    })
-    .catch(err => {
-      res.status(500).send({
-        message: err.name + ': ' + err.message || "Error retrieving  with id=" + id
+exports.findOne = async (req, res) => {
+  try {
+    if (!req.params.id) {
+      res.status(400).send({
+        message: "id can not be empty!"
       });
-    });
+    }
+    var province = await Province.findByPk(req.params.id);
+    if (province) {
+      res.status(200).send({ message: `Found with id=${req.params.id}.`, data: province, status: 200 });
+    } else {
+      res.status(404).send({ message: `Cannot find with id=${req.params.id}.` });
+    }
+  } catch (error) {
+    res.status(500).send({ message: error.name + error.message });
+  }
 };
 
 // Update by the id in the request
