@@ -24,9 +24,9 @@ exports.create = async (req, res) => {
 exports.findAll = async (req, res) => {
   try {
     const name = req.query.name;
-    var province = await Province.findAll({ where: name ? { name: { [Op.like]: `%${name}%` } } : null });
-    if (province) {
-      res.status(200).send({ message: 'All provinces found', data: province, status: 200 });
+    var provinces = await Province.findAll({ where: name ? { name: { [Op.like]: `%${name}%` } } : null });
+    if (provinces) {
+      res.status(200).send(provinces);
     } else {
       res.status(404).send({ message: 'Cannot find' });
     }
@@ -45,7 +45,7 @@ exports.findOne = async (req, res) => {
     }
     var province = await Province.findByPk(req.params.id);
     if (province) {
-      res.status(200).send({ message: `Found with id=${req.params.id}.`, data: province, status: 200 });
+      res.status(200).send(province);
     } else {
       res.status(404).send({ message: `Cannot find with id=${req.params.id}.` });
     }
