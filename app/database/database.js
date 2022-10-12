@@ -22,7 +22,8 @@ require("../models/comm_category.model.js")(sequelize, Sequelize);
 require("../models/event_category.model.js")(sequelize, Sequelize);
 require("../models/event.model.js")(sequelize, Sequelize);
 require("../models/community.model.js")(sequelize, Sequelize);
-
+require("../models/user.model.js")(sequelize, Sequelize);
+require("../models/tokens.model.js")(sequelize, Sequelize);
 
 applySchemaRelations(sequelize);
 
