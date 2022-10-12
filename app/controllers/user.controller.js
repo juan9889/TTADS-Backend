@@ -80,6 +80,7 @@ exports.login = async (req, res) => {
     });
     hash = crypto.createHash('sha256').update(req.params.user_password).digest('hex');
     if(user.user_password==hash){
+      //crear token, guardarlo, etc, etc
       res.status(200).send({ message: 'Wrong password', data:user, token:'abcdeg' });
     }else{
       res.status(500).send({ message: 'Wrong password' });
