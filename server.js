@@ -17,6 +17,7 @@ require("./app/routes/community.routes.js")(app)
 require("./app/routes/event_category.routes.js")(app);
 require("./app/routes/event.routes.js")(app);
 require("./app/routes/province.routes.js")(app);
+require("./app/routes/user.routes.js")(app);
 
 //Sequelize
 sequelize = require("./app/database/database.js");
