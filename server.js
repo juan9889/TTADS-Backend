@@ -8,7 +8,7 @@ var corsOptions = {
 };
 app.use(cors(corsOptions));
 app.use(express.json());
-app.use(express.urlencoded({ extended: true })); 
+app.use(express.urlencoded({ extended: true }));
 
 //Routes
 require("./app/routes/city.routes.js")(app);
@@ -33,11 +33,11 @@ app.listen(PORT, () => {
   sleep(5000).then(() => { fillTestData(); });
 });
 
-function sleep(ms) {
+function sleep (ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-async function fillTestData() {
+async function fillTestData () {
   console.log('Metodo para llenar datos de prueba');
   await testdata.fillData();
 }
