@@ -2,7 +2,7 @@ const Sequelize = require("sequelize");
 const { applySchemaRelations } = require("../models/schema_relations.js");
 
 
-const sequelize = new Sequelize(process.env.DB, process.env.USER, process.env.PASSWORD, {
+const sequelize = new Sequelize(process.env.DB, process.env.DBUSER, process.env.PASSWORD, {
     host: process.env.HOST,
     dialect: process.env.DIALECT,
     operatorsAliases: false,
