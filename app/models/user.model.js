@@ -8,10 +8,15 @@ module.exports = (sequelize, Sequelize) => {
     username: {
       type: Sequelize.DataTypes.STRING
     },
-    user_password: {
+    password: {
+      type: Sequelize.DataTypes.STRING
+    },
+    name: {
+      type: Sequelize.DataTypes.STRING
+    },
+    mail: {
       type: Sequelize.DataTypes.STRING
     }
-
   })
   return user
 }

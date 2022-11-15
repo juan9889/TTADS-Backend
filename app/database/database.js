@@ -23,6 +23,8 @@ require('../models/event.model.js')(sequelize, Sequelize)
 require('../models/community.model.js')(sequelize, Sequelize)
 require('../models/user.model.js')(sequelize, Sequelize)
 require('../models/tokens.model.js')(sequelize, Sequelize)
+require('../models/user_community.model.js')(sequelize, Sequelize)
+require('../models/user_event.model.js')(sequelize, Sequelize)
 
 applySchemaRelations(sequelize)
 
