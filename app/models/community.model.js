@@ -13,18 +13,16 @@ module.exports = (sequelize, Sequelize) => {
     }
   }, {
     scopes: {
-      findAll: {
-        include: {
-          model: sequelize.models.comm_category,
-          required: true,
-          attributes: ['id', 'name', 'icon', 'iconColor']
-        }
-      },
-      findOne: {
-        include: {
-          model: sequelize.models.comm_category,
-          required: true,
-          attributes: ['id', 'name', 'icon', 'iconColor']
+      findOne (communityId) {
+        return {
+          where: {
+            id: communityId
+          },
+          include: {
+            model: sequelize.models.comm_category,
+            required: true,
+            attributes: ['id', 'name', 'icon', 'iconColor']
+          }
         }
       },
       findByTerm (term) {
@@ -52,37 +50,40 @@ module.exports = (sequelize, Sequelize) => {
           }
         }
       },
-      events: {
-        include: [
-          {
-            model: sequelize.models.event,
-            required: true,
-            attributes: ['id', 'title', 'date', 'place', 'description', 'time', 'state'],
-            include: [
-              {
-                model: sequelize.models.community,
-                required: true,
-                attributes: ['id', 'name']
-              },
-              {
-                model: sequelize.models.event_category,
-                required: true,
-                attributes: ['id', 'name', 'icon', 'iconColor']
-              },
-              {
-                model: sequelize.models.city,
-                required: true,
-                attributes: ['id', 'name'],
-                include: {
-                  model: sequelize.models.province,
+      events (communityId) {
+        return {
+          where: {
+            id: communityId
+          },
+          include: [
+            {
+              model: sequelize.models.event,
+              required: true,
+              include: [
+                {
+                  model: sequelize.models.community,
                   required: true,
-                  attributes: ['id', 'name']
+                  attributes: ['name', 'id']
+                },
+                {
+                  model: sequelize.models.event_category,
+                  required: true,
+                  attributes: ['name', 'id', 'icon', 'iconColor']
+                },
+                {
+                  model: sequelize.models.city,
+                  required: true,
+                  attributes: ['name', 'id'],
+                  include: {
+                    model: sequelize.models.province,
+                    required: true,
+                    attributes: ['name', 'id']
+                  }
                 }
-              }
-            ]
-          }
-        ]
-
+              ]
+            }
+          ]
+        }
       }
     }
   })
