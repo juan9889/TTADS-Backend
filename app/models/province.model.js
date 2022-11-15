@@ -1,5 +1,5 @@
 module.exports = (sequelize, Sequelize) => {
-  const province = sequelize.define("province", {
+  const province = sequelize.define('province', {
     id: {
       type: Sequelize.DataTypes.INTEGER,
       primaryKey: true,
@@ -22,6 +22,6 @@ module.exports = (sequelize, Sequelize) => {
         }
       }
     }
-  });
-  return province;
-};
+  })
+  return province
+}

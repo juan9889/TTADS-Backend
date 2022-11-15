@@ -1,21 +1,21 @@
 module.exports = app => {
-  const event = require("../controllers/event.controller.js");
-  var router = require("express").Router();
+  const event = require('../controllers/event.controller.js')
+  const router = require('express').Router()
 
   // Create a new Tutorial
-  router.post("/", event.create);
+  router.post('/', event.create)
 
   // Retrieve all Tutorials
-  router.get("/", event.findAll);
+  router.get('/', event.findAll)
 
   // Retrieve a single Tutorial with id
-  router.get("/:id", event.findOne);
+  router.get('/:id', event.findOne)
 
   // Update a Tutorial with id
-  router.put("/:id", event.update);
+  router.put('/:id', event.update)
 
   // Delete a Tutorial with id
-  router.delete("/:id", event.delete); 
+  router.delete('/:id', event.delete)
 
-  app.use('/api/events', router);
-};
+  app.use('/api/events', router)
+}

@@ -1,5 +1,5 @@
 module.exports = (sequelize, Sequelize) => {
-  const event = sequelize.define("event", {
+  const event = sequelize.define('event', {
     id: {
       type: Sequelize.DataTypes.INTEGER,
       primaryKey: true,
@@ -7,7 +7,7 @@ module.exports = (sequelize, Sequelize) => {
     },
     title: {
       type: Sequelize.DataTypes.STRING
-    },    
+    },
     place: {
       type: Sequelize.DataTypes.STRING
     },
@@ -25,7 +25,7 @@ module.exports = (sequelize, Sequelize) => {
     }
   }, {
     scopes: {
-      findOne(eventId) {
+      findOne (eventId) {
         return {
           where: {
             id: eventId
@@ -46,38 +46,38 @@ module.exports = (sequelize, Sequelize) => {
                 model: sequelize.models.province,
                 required: true
               }
-            },
+            }
           ]
         }
       },
-      findAll() {
+      findAll () {
         return {
-          attributes:['id','title','date', 'place', 'description', 'time', 'state'],
+          attributes: ['id', 'title', 'date', 'place', 'description', 'time', 'state'],
           include: [
             {
               model: sequelize.models.community,
               required: true,
-              attributes:['name','id']              
+              attributes: ['name', 'id']
             },
             {
               model: sequelize.models.event_category,
               required: true,
-              attributes: ['name','id', 'icon', 'iconColor']              
+              attributes: ['name', 'id', 'icon', 'iconColor']
             },
             {
               model: sequelize.models.city,
               required: true,
-              attributes:['name','id'],
+              attributes: ['name', 'id'],
               include: {
                 model: sequelize.models.province,
                 required: true,
-                attributes:['name','id']                
+                attributes: ['name', 'id']
               }
-            },
+            }
           ]
         }
       }
     }
-  });
-  return event;
-};
+  })
+  return event
+}

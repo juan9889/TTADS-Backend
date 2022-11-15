@@ -1,5 +1,5 @@
 module.exports = (sequelize, Sequelize) => {
-  const community = sequelize.define("community", {
+  const community = sequelize.define('community', {
     id: {
       type: Sequelize.DataTypes.INTEGER,
       primaryKey: true,
@@ -13,7 +13,7 @@ module.exports = (sequelize, Sequelize) => {
     }
   }, {
     scopes: {
-      findOne(communityId) {
+      findOne (communityId) {
         return {
           where: {
             id: communityId
@@ -25,18 +25,22 @@ module.exports = (sequelize, Sequelize) => {
           }
         }
       },
-      findByTerm(term) {
-        const { Op } = require("sequelize");
-        console.log('Term : ' + term);
+      findByTerm (term) {
+        const { Op } = require('sequelize')
+        console.log('Term : ' + term)
         return {
           where: {
             [Op.or]: [
-              { name: {
-                [Op.substring]: term,
-              }, },
-              { description: {
-                [Op.substring]: term,
-              }, },
+              {
+                name: {
+                  [Op.substring]: term
+                }
+              },
+              {
+                description: {
+                  [Op.substring]: term
+                }
+              }
             ]
           },
           include: {
@@ -46,7 +50,7 @@ module.exports = (sequelize, Sequelize) => {
           }
         }
       },
-      events(communityId) {
+      events (communityId) {
         return {
           where: {
             id: communityId
@@ -64,24 +68,24 @@ module.exports = (sequelize, Sequelize) => {
                 {
                   model: sequelize.models.event_category,
                   required: true,
-                  attributes: ['name','id', 'icon', 'iconColor']
+                  attributes: ['name', 'id', 'icon', 'iconColor']
                 },
                 {
                   model: sequelize.models.city,
                   required: true,
-                  attributes: ['name','id'],
+                  attributes: ['name', 'id'],
                   include: {
                     model: sequelize.models.province,
                     required: true,
-                    attributes: ['name','id']
+                    attributes: ['name', 'id']
                   }
                 }
-              ],
+              ]
             }
           ]
         }
       }
     }
-  });
-  return community;
-};
+  })
+  return community
+}

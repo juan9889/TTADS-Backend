@@ -1,5 +1,5 @@
 module.exports = (sequelize, Sequelize) => {
-  const token = sequelize.define("token", {
+  const token = sequelize.define('token', {
     id: {
       type: Sequelize.DataTypes.INTEGER,
       primaryKey: true,
@@ -11,8 +11,7 @@ module.exports = (sequelize, Sequelize) => {
     user_id: {
       type: Sequelize.DataTypes.INTEGER
     }
-    
 
-  });
-  return token;
-};
+  })
+  return token
+}

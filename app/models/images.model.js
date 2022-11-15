@@ -1,5 +1,5 @@
 module.exports = (sequelize, Sequelize) => {
-  const image = sequelize.define("image", {
+  const image = sequelize.define('image', {
     uuid: {
       type: Sequelize.DataTypes.STRING,
       primaryKey: true
@@ -7,8 +7,8 @@ module.exports = (sequelize, Sequelize) => {
     name: {
       type: Sequelize.DataTypes.STRING
     }
-  });
-  return image;
-};
+  })
+  return image
+}
 
 // Crear modelo para guardar imágenes de comunidades en la base de datos.
