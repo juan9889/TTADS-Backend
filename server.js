@@ -4,6 +4,7 @@ const cors = require('cors')
 require('dotenv').config()
 const testdata = require('./app/config/test_data.js')
 const app = express()
+
 const corsOptions = {
   origin: '*'
 }

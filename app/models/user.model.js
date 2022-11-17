@@ -8,6 +8,9 @@ module.exports = (sequelize, Sequelize) => {
     username: {
       type: Sequelize.DataTypes.STRING
     },
+    used_oauth: {
+      type: Sequelize.DataTypes.BOOLEAN
+    },
     password: {
       type: Sequelize.DataTypes.STRING
     },

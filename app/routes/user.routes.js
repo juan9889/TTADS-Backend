@@ -15,7 +15,7 @@ module.exports = app => {
 
   // router.delete("/:id", provinces.delete);
 
-  // router.get("/:id/cities", provinces.findCities);
+  router.get('/github/:access_token', users.getJwtFromOauthGithubToken)
 
   app.use('/api/users', router)
 }
