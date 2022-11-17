@@ -12,9 +12,10 @@ app.use(cors(corsOptions))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
-const CLIENT_ID = "30922afb2cdc1a52ad8f";
-const CLIENT_SECRET = "6862513c2ae3d4330de06fb4e7088455eaf9ce71";
+const CLIENT_ID = process.env.CLIENT_ID;
+const CLIENT_SECRET = process.env.CLIENT_SECRET;
 const GITHUB_URL = "https://github.com/login/oauth/access_token";
+const CLIENT_URL= process.env.CLIENT_URL
 
 // Routes
 require('./app/routes')(app)
@@ -35,7 +36,7 @@ app.get("/oauth/redirect", (req, res) => {
     },
   }).then((response) => {
     res.redirect(
-      `http://localhost:3000?access_token=${response.data.access_token}`
+      `${CLIENT_URL}/auth/github_confirm?access_token=${response.data.access_token}`
     );
   });
 });
