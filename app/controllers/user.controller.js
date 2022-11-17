@@ -70,18 +70,29 @@ exports.login = async (req, res) => {
     return
   }
   try {
+    console.log('Algo')
+    console.log('usr = '+req.params.username+' pass='+ req.params.user_password)
     const user = await User.findOne({
       where: {
         username: req.params.username
       }
     })
+    if(user==null){
+      res.status(404).send({ message: 'No existe usuario' })
+      return
+    }else{
+
+    
     const hash = crypto.createHash('sha256').update(req.params.user_password).digest('hex')
-    if (user.user_password === hash) {
+    if (user.password === hash) {
       // crear token, guardarlo, etc, etc
-      res.status(200).send({ message: 'ok', data: user, token: 'abcdeg' })
+      var token_res=createToken(user);
+      res.status(200).send({ message: 'ok', data: user, token: token_res })
+      return
     } else {
       res.status(500).send({ message: 'Wrong password' })
-    }
+      return
+    }}
   } catch (error) {
     res.status(500).send({ message: error.name + ': ' + error.message })
   }
