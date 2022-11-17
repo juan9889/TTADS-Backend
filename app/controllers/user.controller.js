@@ -127,6 +127,7 @@ exports.getJwtFromOauthGithubToken = async (req, res) => {
       });
       var jwt_token = createToken(user_new);
       res.status(200).send({message: 'Token ' + jwt_token })
+      return
     }else{
       console.log('Existe un usuario con este nombre')
       if(existing_user.used_oauth==true){
@@ -134,7 +135,7 @@ exports.getJwtFromOauthGithubToken = async (req, res) => {
         id_user=existing_user.id;
         var jwt_token = createToken(existing_user);
       res.status(200).send({message: 'Token ' + jwt_token })
-        
+        return
       }else{
         //Para evitar que un usuario con un nombre igual a otro existente en la bd lo pise con el que esta usando oauth
         console.log('Este usuario no usa oauth')
@@ -152,7 +153,7 @@ exports.getJwtFromOauthGithubToken = async (req, res) => {
 function createToken (user) {
   const token = jwt.sign({
     name: user.name,
-    id: user,id
-}, process.env.TOKEN_SECRET)
+    id: user.id
+}, "secreto_para_hacer_tokens_asdfgh")
 return token;
 }

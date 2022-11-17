@@ -52,7 +52,7 @@ function applySchemaRelations (sequelize) {
   })
   // city user
   city.hasMany(user, {
-    foreignKey: 'userId',
+    foreignKey: 'cityId',
     sourceKey: 'id',
     onDelete: 'RESTRICT'
   })
