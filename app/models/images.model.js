@@ -1,13 +1,13 @@
 const { sequelize, Sequelize } = require('../database/database.js')
 
 const image = sequelize.define('image', {
-    uuid: {
-        type: Sequelize.DataTypes.STRING,
-        primaryKey: true
-    },
-    name: {
-        type: Sequelize.DataTypes.STRING
-    }
+  uuid: {
+    type: Sequelize.DataTypes.STRING,
+    primaryKey: true
+  },
+  name: {
+    type: Sequelize.DataTypes.STRING
+  }
 })
 
 module.exports = image

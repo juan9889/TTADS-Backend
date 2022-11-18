@@ -70,7 +70,7 @@ exports.findOne = (req, res) => {
     .catch(err => {
       res.status(500).send({
         message:
-        err.name + ': ' + err.message || 'Error retrieving  with id=' + id
+          err.name + ': ' + err.message || 'Error retrieving  with id=' + id
       })
     })
 }
