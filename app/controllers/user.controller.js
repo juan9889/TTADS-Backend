@@ -3,6 +3,7 @@ const sequelize = require('../database/database.js')
 const User = sequelize.models.user
 const {Octokit} = require('octokit')
 const jwt = require('jsonwebtoken');
+const user = require('../models/user.model.js');
 
 // Create and Save a new user
 exports.create = async (req, res) => {
@@ -62,7 +63,7 @@ exports.findOne = async (req, res) => {
 }
 
 exports.login = async (req, res) => {
-  if (!req.params.username || !req.params.user_password) {
+  if (!req.body.username || !req.body.user_password) {
     res.status(400).send({
       message: 'username or password can not be empty!'
 
@@ -71,10 +72,10 @@ exports.login = async (req, res) => {
   }
   try {
     console.log('Algo')
-    console.log('usr = '+req.params.username+' pass='+ req.params.user_password)
+    console.log('usr = '+req.body.username+' pass='+ req.body.user_password)
     const user = await User.findOne({
       where: {
-        username: req.params.username
+        username: req.body.username
       }
     })
     if(user==null){
@@ -83,7 +84,7 @@ exports.login = async (req, res) => {
     }else{
 
     
-    const hash = crypto.createHash('sha256').update(req.params.user_password).digest('hex')
+    const hash = crypto.createHash('sha256').update(req.body.user_password).digest('hex')
     if (user.password === hash) {
       // crear token, guardarlo, etc, etc
       var token_res=createToken(user);
@@ -159,6 +160,16 @@ exports.getJwtFromOauthGithubToken = async (req, res) => {
     res.status(500).send({ message: error.name + ': ' + error.message })
   }
 
+}
+
+exports.findMe = async (req, res) => {
+  const user = await User.findOne({
+    where: {
+      username: 'juan9889'
+    }
+
+});
+res.status(200).send(user)
 }
 
 function createToken (user) {

@@ -9,9 +9,10 @@ module.exports = app => {
 
   // router.get("/:username", users.findOne);
 
-  router.get('/login/:username/:user_password', users.login)
+  router.post('/login', users.login)
 
   // router.put("/:id", provinces.update);
+  router.get('/me', users.findMe)
 
   // router.delete("/:id", provinces.delete);
 
