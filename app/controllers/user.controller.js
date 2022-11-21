@@ -16,7 +16,7 @@ exports.create = async (req, res) => {
   }
   const user = ({
     username: req.body.username,
-    user_password: req.body.user_password
+    password: req.body.user_password
   })
   try {
     const existing = await User.findAll({
@@ -29,9 +29,9 @@ exports.create = async (req, res) => {
       res.status(505).send({ message: 'Already exists' })
       return
     } else {
-      const hash = crypto.createHash('sha256').update(user.user_password).digest('hex')
+      const hash = crypto.createHash('sha256').update(user.password).digest('hex')
       console.log(hash)
-      user.user_password = hash
+      user.password = hash
       User.create(user)
       res.status(201).send({ message: 'Created', data: req.body, status: 201 })
     }
@@ -163,6 +163,7 @@ exports.getJwtFromOauthGithubToken = async (req, res) => {
 }
 
 exports.findMe = async (req, res) => {
+
   const user = await User.findOne({
     where: {
       username: 'juan9889'
