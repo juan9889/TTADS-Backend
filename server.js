@@ -1,5 +1,6 @@
 const express = require('express')
 const axios = require("axios")
+const cookieParser = require('cookie-parser');
 const cors = require('cors')
 require('dotenv').config()
 const testdata = require('./app/config/test_data.js')
@@ -11,6 +12,7 @@ const corsOptions = {
 app.use(cors(corsOptions))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
+app.use(cookieParser()); 
 
 const CLIENT_ID = process.env.CLIENT_ID;
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
