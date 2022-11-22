@@ -1,9 +1,8 @@
 const crypto = require('crypto')
 const sequelize = require('../database/database.js')
 const User = sequelize.models.user
-const {Octokit} = require('octokit')
-const jwt = require('jsonwebtoken');
-const user = require('../models/user.model.js');
+const { Octokit } = require('octokit')
+const jwt = require('jsonwebtoken')
 
 // Create and Save a new user
 exports.create = async (req, res) => {
@@ -48,7 +47,6 @@ exports.findOne = async (req, res) => {
     })
     return
   }
-  console.log('GET')
   const username_query = req.params.username
   try {
     const user = await User.findOne({
@@ -71,29 +69,27 @@ exports.login = async (req, res) => {
     return
   }
   try {
-    console.log('Algo')
-    console.log('usr = '+req.body.username+' pass='+ req.body.user_password)
+    console.log('usr = ' + req.body.username + ' pass=' + req.body.user_password)
     const user = await User.findOne({
       where: {
         username: req.body.username
       }
     })
-    if(user==null){
+    if (user == null) {
       res.status(404).send({ message: 'No existe usuario' })
       return
-    }else{
-
-    
-    const hash = crypto.createHash('sha256').update(req.body.user_password).digest('hex')
-    if (user.password === hash) {
-      // crear token, guardarlo, etc, etc
-      var token_res=createToken(user);
-      res.status(200).send({ message: 'ok', data: user, token: token_res })
-      return
     } else {
-      res.status(500).send({ message: 'Wrong password' })
-      return
-    }}
+      const hash = crypto.createHash('sha256').update(req.body.user_password).digest('hex')
+      if (user.password === hash) {
+      // crear token, guardarlo, etc, etc
+        const token_res = createToken(user)
+        res.status(200).send({ message: 'ok', data: user, token: token_res })
+        return
+      } else {
+        res.status(500).send({ message: 'Wrong password' })
+        return
+      }
+    }
   } catch (error) {
     res.status(500).send({ message: error.name + ': ' + error.message })
   }
@@ -101,82 +97,70 @@ exports.login = async (req, res) => {
 
 exports.getJwtFromOauthGithubToken = async (req, res) => {
   if (!req.params.access_token) {
-    res.status(400).send({
-      message: 'access_token can not be empty!'
-    })
+    res.status(400).send({ message: 'access_token can not be empty!' })
     return
   }
   console.log('Tengo un token de oauth, intento obtener info del usuario de github')
   const oauth_token = req.params.access_token
   try {
-    const octokit = new Octokit({
-      auth: oauth_token
-    })
-   
-    var github_username = (await (await octokit.request('GET /user', {})).data.login)
-    console.log(github_username);
-    //verificar si el usuario ya existe
-    var id_user;
-    
-    const existing_user=await User.findOne({
+    const octokit = new Octokit({ auth: oauth_token })
+    const github_username = ((await octokit.request('GET /user', {})).data.login)
+
+    // verificar si el usuario ya existe
+    const existing_user = await User.findOne({
       where: {
         username: github_username
       }
     })
-    if(existing_user==null){
-      console.log('El usuario es nuevo')
-      var user_person_name = (await (await octokit.request('GET /user', {})).data.name)
-      var user_new = ({
+    if (existing_user == null) {
+      const user_person_name = ((await octokit.request('GET /user', {})).data.name)
+      let user_new = ({
         username: github_username,
         name: user_person_name,
         used_oauth: true
       })
-      await User.create(user_new);
-      user_new=await User.findOne({
+      await User.create(user_new)
+      user_new = await User.findOne({
         where: {
           username: github_username
         }
-      });
-      var jwt_token = createToken(user_new);
+      })
+      const jwt_token = createToken(user_new)
       res.status(200).send({ message: 'ok', data: user_new, token: jwt_token })
       return
-    }else{
-      console.log('Existe un usuario con este nombre')
-      if(existing_user.used_oauth==true){
-        console.log('Este usuario utiliza oauth')
-        id_user=existing_user.id;
-        var jwt_token = createToken(existing_user);
-      res.status(200).send({ message: 'ok', data: existing_user, token: jwt_token })
+    } else {
+      // Existe un usuario con este nombre
+      if (existing_user.used_oauth === true) {
+        // Este usuario utiliza oauth
+        const jwt_token = createToken(existing_user)
+        res.status(200).send({ message: 'ok', data: existing_user, token: jwt_token })
         return
-      }else{
-        //Para evitar que un usuario con un nombre igual a otro existente en la bd lo pise con el que esta usando oauth
-        console.log('Este usuario no usa oauth')
+      } else {
+        // Para evitar que un usuario con un nombre igual a otro existente en la bd lo pise
+        // con el que esta usando oauth - Este usuario no usa oauth
         res.status(404).send({ message: 'No existe el usuario' })
         return
       }
     }
-    res.status(200).send({message: ''})
   } catch (error) {
     res.status(500).send({ message: error.name + ': ' + error.message })
   }
-
 }
 
 exports.findMe = async (req, res) => {
-
   const user = await User.findOne({
     where: {
       username: 'juan9889'
     }
 
-});
-res.status(200).send({data: user })
+  })
+  res.status(200).send({ data: user })
 }
 
 function createToken (user) {
   const token = jwt.sign({
     name: user.name,
     id: user.id
-}, "secreto_para_hacer_tokens_asdfgh")
-return token;
+  }, 'secreto_para_hacer_tokens_asdfgh')
+  return token
 }
