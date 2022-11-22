@@ -11,14 +11,12 @@ const province = sequelize.define('province', {
   }
 }, {
   scopes: {
-    cities (provinceId) {
+    cities () {
       return {
-        where: {
-          id: provinceId
-        },
         include: {
           model: sequelize.models.city,
-          required: true
+          required: true,
+          attributes: ['id', 'name']
         }
       }
     }

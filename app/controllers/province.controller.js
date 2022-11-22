@@ -1,4 +1,3 @@
-const { Op } = require('sequelize')
 const sequelize = require('../database/database.js')
 const Province = sequelize.models.province
 
@@ -21,8 +20,7 @@ exports.create = async (req, res) => {
 // Retrieve all ciudades from the database.
 exports.findAll = async (req, res) => {
   try {
-    const name = req.query.name
-    const provinces = await Province.findAll({ where: name ? { name: { [Op.like]: `%${name}%` } } : null })
+    const provinces = await Province.findAll()
     if (provinces) {
       res.status(200).send(provinces)
     } else {
@@ -41,7 +39,8 @@ exports.findOne = async (req, res) => {
         message: 'id can not be empty!'
       })
     }
-    const province = await Province.findByPk(req.params.id)
+    const id = parseInt(req.params.id)
+    const province = await Province.findByPk(id)
     if (province) {
       res.status(200).send(province)
     } else {
@@ -97,8 +96,8 @@ exports.findCities = async (req, res) => {
       return
     };
     const id = parseInt(req.params.id)
-    const cities = await Province.scope({ method: ['cities', id] }).findAll()
-    if (cities && cities.length > 0) {
+    const cities = await Province.scope('cities').findByPk(id)
+    if (cities) {
       res.status(200).send(cities)
     } else {
       res.status(404).send({ message: `Cannot find cities in the province with id=${id}.` })

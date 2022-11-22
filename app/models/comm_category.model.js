@@ -16,14 +16,12 @@ const comm_category = sequelize.define('comm_category', {
   }
 }, {
   scopes: {
-    communities (categoryId) {
+    communities () {
       return {
-        where: {
-          id: categoryId
-        },
         include: {
           model: sequelize.models.community,
           required: true,
+          attributes: ['id', 'name'],
           include: {
             model: sequelize.models.comm_category,
             required: true,

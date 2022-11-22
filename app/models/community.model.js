@@ -14,11 +14,8 @@ const community = sequelize.define('community', {
   }
 }, {
   scopes: {
-    findOne (communityId) {
+    find () {
       return {
-        where: {
-          id: communityId
-        },
         include: {
           model: sequelize.models.comm_category,
           required: true,
@@ -51,11 +48,8 @@ const community = sequelize.define('community', {
         }
       }
     },
-    events (communityId) {
+    events () {
       return {
-        where: {
-          id: communityId
-        },
         include: [
           {
             model: sequelize.models.event,
@@ -64,21 +58,21 @@ const community = sequelize.define('community', {
               {
                 model: sequelize.models.community,
                 required: true,
-                attributes: ['name', 'id']
+                attributes: ['id', 'name']
               },
               {
                 model: sequelize.models.event_category,
                 required: true,
-                attributes: ['name', 'id', 'icon', 'iconColor']
+                attributes: ['id', 'name', 'icon', 'iconColor']
               },
               {
                 model: sequelize.models.city,
                 required: true,
-                attributes: ['name', 'id'],
+                attributes: ['id', 'name'],
                 include: {
                   model: sequelize.models.province,
                   required: true,
-                  attributes: ['name', 'id']
+                  attributes: ['id', 'name']
                 }
               }
             ]

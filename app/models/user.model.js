@@ -23,30 +23,25 @@ const user = sequelize.define('user', {
   }
 }, {
   scopes: {
-    findOne (userId) {
+    find () {
+      // DESCOMENTAR CUANDO LOS USIARIOS TENGAN CUIDADES Y PROVINCIAS
       return {
-        where: {
-          id: userId
-        },
-        include: [
-          {
-            model: sequelize.models.city,
-            required: true,
-            attributes: ['id', 'name'],
-            include: {
-              model: sequelize.models.province,
-              required: true,
-              attributes: ['id', 'name']
-            }
-          }
-        ]
+        // include: [
+        //   {
+        //     model: sequelize.models.city,
+        //     required: true,
+        //     attributes: ['id', 'name'],
+        //     include: {
+        //       model: sequelize.models.province,
+        //       required: true,
+        //       attributes: ['id', 'name']
+        //     }
+        //   }
+        // ]
       }
     },
-    events (userId) {
+    events () {
       return {
-        where: {
-          id: userId
-        },
         include: [
           {
             model: sequelize.models.event,
@@ -78,20 +73,22 @@ const user = sequelize.define('user', {
         ]
       }
     },
-    communities (userId) {
+    communities () {
       return {
-        where: {
-          id: userId
-        },
-        include: {
+        include: [{
           model: sequelize.models.community,
           required: true,
+          attributes: ['id', 'name'],
           include: {
             model: sequelize.models.comm_category,
             required: true,
             attributes: ['id', 'name', 'icon', 'iconColor']
           }
-        }
+        },
+        {
+          model: sequelize.models.community,
+          required: true
+        }]
       }
     }
   }

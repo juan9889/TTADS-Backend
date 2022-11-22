@@ -7,7 +7,7 @@ const user_community = sequelize.define('user_community', {
     autoIncrement: true,
     allowNull: false
   },
-  isMod: {
+  mod: {
     type: Sequelize.DataTypes.BOOLEAN
   }
 })

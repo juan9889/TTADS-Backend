@@ -38,22 +38,21 @@ exports.create = (req, res) => {
 
 // Retrieve all ciudades from the database.
 exports.findAll = (req, res) => {
-  const id = parseInt(req.params.id)
-  Event.scope('findAll').findAll()
+  Event.scope('find').findAll()
     .then(data => {
       if (data) {
         console.log(data)
         res.status(200).send(data)
       } else {
         res.status(404).send({
-          message: `Cannot find with id=${id}.`
+          message: 'Cannot find with.'
         })
       }
     })
     .catch(err => {
       res.status(500).send({
         message:
-          err.name + ': ' + err.message || 'Error retrieving  with id=' + id
+          err.name + ': ' + err.message || 'Error retrieving'
       })
     })
 }
@@ -66,7 +65,7 @@ exports.findOne = (req, res) => {
     return
   }
   const id = parseInt(req.params.id)
-  Event.scope({ method: ['findOne', id] }).findAll()
+  Event.scope('find').findByPk(id)
     .then(data => {
       if (data) {
         console.log(data)

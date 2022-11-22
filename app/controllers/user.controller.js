@@ -40,21 +40,98 @@ exports.create = async (req, res) => {
 }
 
 // Find a single user with username
-exports.findOne = async (req, res) => {
-  if (!req.params.username) {
-    res.status(400).send({
-      message: 'username can not be empty!'
-    })
-    return
-  }
-  const username_query = req.params.username
+exports.findByUserName = async (req, res) => {
   try {
-    const user = await User.findOne({
+    if (!req.params.username) {
+      res.status(400).send({
+        message: 'username can not be empty!'
+      })
+      return
+    }
+    const username_query = req.params.username
+    const user = await User.scope('find').findOne({
       where: {
         username: username_query
       }
     })
-    res.status(200).send(user)
+    if (user) {
+      res.status(200).send(user)
+    } else {
+      res.status(404).send({ message: `Cannot find with id=${req.params.username}.` })
+    }
+  } catch (error) {
+    res.status(500).send({ message: error.name + ': ' + error.message })
+  }
+}
+
+exports.findAll = async (req, res) => {
+  try {
+    const users = await User.scope('find').findAll()
+    if (users) {
+      res.status(200).send(users)
+    } else {
+      res.status(404).send({ message: 'Cannot find' })
+    }
+  } catch (error) {
+    res.status(500).send({ message: error.name + ': ' + error.message })
+  }
+}
+
+exports.findEvents = async (req, res) => {
+  try {
+    if (!req.params.id) {
+      res.status(400).send({
+        message: 'user id can not be empty!'
+      })
+      return
+    }
+    const id = parseInt(req.params.id)
+    const user = await User.scope('events').findByPk(id)
+    if (user) {
+      res.status(200).send(user)
+    } else {
+      res.status(404).send({ message: 'Cannot find' })
+    }
+  } catch (error) {
+    res.status(500).send({ message: error.name + ': ' + error.message })
+  }
+}
+
+exports.findCommunities = async (req, res) => {
+  try {
+    if (!req.params.id) {
+      res.status(400).send({
+        message: 'user id can not be empty!'
+      })
+      return
+    }
+    const id = parseInt(req.params.id)
+    const user = await User.scope('communities').findByPk(id)
+    if (user) {
+      res.status(200).send(user)
+    } else {
+      res.status(404).send({ message: 'Cannot find' })
+    }
+  } catch (error) {
+    res.status(500).send({ message: error.name + ': ' + error.message })
+  }
+}
+
+exports.findOne = async (req, res) => {
+  try {
+    if (!req.params.id) {
+      res.status(400).send({
+        message: 'id can not be empty!'
+      })
+      return
+    }
+    const id = parseInt(req.params.id)
+    const user = await User.scope('find').findByPk(id)
+    if (user) {
+      res.status(200).send(user)
+    } else {
+      res.status(404).send({ message: `Cannot find with id=${req.params.id}.` })
+    }
   } catch (error) {
     res.status(500).send({ message: error.name + ': ' + error.message })
   }

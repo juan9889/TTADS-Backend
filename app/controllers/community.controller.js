@@ -1,4 +1,3 @@
-const { Op } = require('sequelize')
 const sequelize = require('../database/database.js')
 const Community = sequelize.models.community
 
@@ -30,16 +29,7 @@ exports.create = (req, res) => {
 
 // Retrieve all ciudades from the database.
 exports.findAll = (req, res) => {
-  const name = req.query.name
-
-  const condition = name ? { name: { [Op.like]: `%${name}%` } } : null
-  Community.findAll({
-    where: condition,
-    include: {
-      model: sequelize.models.comm_category,
-      required: true
-    }
-  })
+  Community.scope('find').findAll()
     .then(data => {
       if (data) {
         res.status(200).send(data)
@@ -64,7 +54,7 @@ exports.findOne = (req, res) => {
     return
   }
   const id = parseInt(req.params.id)
-  Community.scope({ method: ['findOne', id] }).findAll()
+  Community.scope('find').findByPk(id)
     .then(data => {
       if (data) {
         console.log(data)
@@ -181,7 +171,7 @@ exports.findEvents = (req, res) => {
     return
   }
   const id = parseInt(req.params.id)
-  Community.scope({ method: ['events', id] }).findAll()
+  Community.scope('events').findByPk(id)
     .then(data => {
       if (data) {
         res.status(200).send(data)
