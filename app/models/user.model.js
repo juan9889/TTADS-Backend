@@ -86,7 +86,7 @@ const user = sequelize.define('user', {
           }
         },
         {
-          model: sequelize.models.community,
+          model: sequelize.models.user_community,
           required: true
         }]
       }

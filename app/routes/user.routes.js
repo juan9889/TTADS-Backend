@@ -9,7 +9,7 @@ module.exports = app => {
 
   router.get('/', users.findAll)
 
-  router.get('/:id', users.findOne)
+  // router.get('/:id', users.findOne)
 
   router.get('/findusername/:username', users.findByUserName)
 
@@ -19,7 +19,8 @@ module.exports = app => {
 
   router.post('/login', users.login)
 
-  router.get('/me', isAuthenticated, users.findOne)
+  // router.get('/me', isAuthenticated, users.findOne)
+  router.get('/me', isAuthenticated, users.findMe)
 
   router.get('/github/:access_token', users.getJwtFromOauthGithubToken)
 
