@@ -140,7 +140,7 @@ exports.findOne = async (req, res) => {
 exports.findMe = async (req, res) => {
   try {
     const id = req.user.id
-    const user = await User.findByPk(id)
+    const user = await User.scope('find').findByPk(id)
     if (!user) {
       return res.json({ message: 'No user found' })
     }
@@ -200,11 +200,9 @@ exports.getJwtFromOauthGithubToken = async (req, res) => {
       auth: oauth_token
     })
 
-    const github_username = (await (await octokit.request('GET /user', {})).data.login)
+    const github_username = ((await octokit.request('GET /user', {})).data.login)
     console.log(github_username)
     // verificar si el usuario ya existe
-    let id_user
-
     const existing_user = await User.findOne({
       where: {
         username: github_username
@@ -212,7 +210,7 @@ exports.getJwtFromOauthGithubToken = async (req, res) => {
     })
     if (existing_user == null) {
       console.log('El usuario es nuevo')
-      const user_person_name = (await (await octokit.request('GET /user', {})).data.name)
+      const user_person_name = ((await octokit.request('GET /user', {})).data.name)
       let user_new = ({
         username: github_username,
         name: user_person_name,
@@ -224,15 +222,14 @@ exports.getJwtFromOauthGithubToken = async (req, res) => {
           username: github_username
         }
       })
-      var jwt_token = createToken(user_new)
+      const jwt_token = createToken(user_new)
       res.status(200).send({ message: 'ok', data: user_new, token: jwt_token })
       return
     } else {
       console.log('Existe un usuario con este nombre')
-      if (existing_user.used_oauth == true) {
+      if (existing_user.used_oauth === true) {
         console.log('Este usuario utiliza oauth')
-        id_user = existing_user.id
-        var jwt_token = createToken(existing_user)
+        const jwt_token = createToken(existing_user)
         res.status(200).send({ message: 'ok', data: existing_user, token: jwt_token })
         return
       } else {
@@ -242,21 +239,10 @@ exports.getJwtFromOauthGithubToken = async (req, res) => {
         return
       }
     }
-    res.status(200).send({ message: '' })
   } catch (error) {
     res.status(500).send({ message: error.name + ': ' + error.message })
   }
 }
-
-// exports.findMe = async (req, res) => {
-//   const user = await User.findOne({
-//     where: {
-//       username: 'juan9889'
-//     }
-
-//   })
-//   res.status(200).send({ data: user })
-// }
 
 function createToken (user) {
   const token = jwt.sign({

@@ -16,7 +16,10 @@ const province = sequelize.define('province', {
         include: {
           model: sequelize.models.city,
           required: true,
-          attributes: ['id', 'name']
+          include: {
+            model: sequelize.models.province,
+            required: true
+          }
         }
       }
     }
