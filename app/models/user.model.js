@@ -24,24 +24,27 @@ const user = sequelize.define('user', {
 }, {
   scopes: {
     find () {
-      // DESCOMENTAR CUANDO LOS USIARIOS TENGAN CUIDADES Y PROVINCIAS
       return {
-        // include: [
-        //   {
-        //     model: sequelize.models.city,
-        //     required: true,
-        //     attributes: ['id', 'name'],
-        //     include: {
-        //       model: sequelize.models.province,
-        //       required: true,
-        //       attributes: ['id', 'name']
-        //     }
-        //   }
-        // ]
+        attributes: {
+          exclude: ['password', 'cityId']
+        },
+        include: [
+          {
+            model: sequelize.models.city,
+            // required: true, descomentar cuando resolvamos le problema de que todos deben tener ciudad
+            attributes: ['id', 'name'],
+            include: {
+              model: sequelize.models.province,
+              // required: true,
+              attributes: ['id', 'name']
+            }
+          }
+        ]
       }
     },
     events () {
       return {
+        // falta completar
         include: [
           {
             model: sequelize.models.event,
@@ -75,6 +78,7 @@ const user = sequelize.define('user', {
     },
     communities () {
       return {
+        // falta completar
         include: [{
           model: sequelize.models.community,
           required: true,

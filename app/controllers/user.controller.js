@@ -7,15 +7,18 @@ const jwt = require('jsonwebtoken')
 // Create and Save a new user
 exports.create = async (req, res) => {
   // Validate request
-  if (!req.body.username || !req.body.user_password) {
+  if (!req.body.username || !req.body.password || !req.body.name || !req.body.mail || !req.body.cityId) {
     res.status(400).send({
-      message: 'user or password can not be empty!'
+      message: 'user need to be complete'
     })
     return
   }
   const user = ({
     username: req.body.username,
-    password: req.body.user_password
+    password: req.body.password,
+    name: req.body.name,
+    mail: req.body.mail,
+    cityId: req.body.cityid
   })
   try {
     const existing = await User.findAll({
@@ -32,7 +35,7 @@ exports.create = async (req, res) => {
       console.log(hash)
       user.password = hash
       User.create(user)
-      res.status(201).send({ message: 'Created', data: req.body, status: 201 })
+      res.status(201).send(user)
     }
   } catch (error) {
     res.status(500).send({ message: error.name + ': ' + error.message })
@@ -151,7 +154,7 @@ exports.findMe = async (req, res) => {
 }
 
 exports.login = async (req, res) => {
-  if (!req.body.username || !req.body.user_password) {
+  if (!req.body.username || !req.body.password) {
     res.status(400).send({
       message: 'username or password can not be empty!'
 
@@ -160,7 +163,7 @@ exports.login = async (req, res) => {
   }
   try {
     console.log('Algo')
-    console.log('usr = ' + req.body.username + ' pass=' + req.body.user_password)
+    console.log('usr = ' + req.body.username + ' pass=' + req.body.password)
     const user = await User.findOne({
       where: {
         username: req.body.username
@@ -170,11 +173,11 @@ exports.login = async (req, res) => {
       res.status(404).send({ message: 'No existe usuario' })
       return
     } else {
-      const hash = crypto.createHash('sha256').update(req.body.user_password).digest('hex')
+      const hash = crypto.createHash('sha256').update(req.body.password).digest('hex')
       if (user.password === hash) {
       // crear token, guardarlo, etc, etc
         const token_res = createToken(user)
-        res.status(200).send({ message: 'ok', data: user, token: token_res })
+        res.status(200).send({ data: user, token: token_res })
         return
       } else {
         res.status(500).send({ message: 'Wrong password' })
@@ -223,14 +226,14 @@ exports.getJwtFromOauthGithubToken = async (req, res) => {
         }
       })
       const jwt_token = createToken(user_new)
-      res.status(200).send({ message: 'ok', data: user_new, token: jwt_token })
+      res.status(200).send({ data: user_new, token: jwt_token })
       return
     } else {
       console.log('Existe un usuario con este nombre')
       if (existing_user.used_oauth === true) {
         console.log('Este usuario utiliza oauth')
         const jwt_token = createToken(existing_user)
-        res.status(200).send({ message: 'ok', data: existing_user, token: jwt_token })
+        res.status(200).send({ data: existing_user, token: jwt_token })
         return
       } else {
         // Para evitar que un usuario con un nombre igual a otro existente en la bd lo pise con el que esta usando oauth

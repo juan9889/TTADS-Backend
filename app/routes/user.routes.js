@@ -13,7 +13,7 @@ module.exports = app => {
 
   router.get('/findusername/:username', users.findByUserName)
 
-  router.get('/communities', users.findCommunities)
+  router.get('/:id/communities', users.findCommunities)
 
   router.get('/events', users.findEvents)
 
