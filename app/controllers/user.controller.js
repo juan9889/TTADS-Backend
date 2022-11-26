@@ -9,7 +9,7 @@ exports.create = async (req, res) => {
   // Validate request
   if (!req.body.username || !req.body.password || !req.body.name || !req.body.mail || !req.body.cityId) {
     res.status(400).send({
-      message: 'user need to be complete'
+      message: 'User need to be complete'
     })
     return
   }
@@ -21,14 +21,13 @@ exports.create = async (req, res) => {
     cityId: req.body.cityid
   })
   try {
-    const existing = await User.findAll({
+    const existing = await User.findOne({
       where: {
         username: user.username
       }
     })
-    console.log(existing)
-    if (existing.length > 0) {
-      res.status(505).send({ message: 'Already exists' })
+    if (existing.length == null) {
+      res.status(505).send({ message: 'El usuario ya existe' })
       return
     } else {
       const hash = crypto.createHash('sha256').update(user.password).digest('hex')
@@ -156,21 +155,19 @@ exports.findMe = async (req, res) => {
 exports.login = async (req, res) => {
   if (!req.body.username || !req.body.password) {
     res.status(400).send({
-      message: 'username or password can not be empty!'
+      message: 'Login need to be complete'
 
     })
     return
   }
   try {
-    console.log('Algo')
-    console.log('usr = ' + req.body.username + ' pass=' + req.body.password)
     const user = await User.findOne({
       where: {
         username: req.body.username
       }
     })
     if (user == null) {
-      res.status(404).send({ message: 'No existe usuario' })
+      res.status(404).send({ message: 'No existe el usuario' })
       return
     } else {
       const hash = crypto.createHash('sha256').update(req.body.password).digest('hex')
@@ -180,12 +177,12 @@ exports.login = async (req, res) => {
         res.status(200).send({ data: user, token: token_res })
         return
       } else {
-        res.status(500).send({ message: 'Wrong password' })
+        res.status(500).send({ message: 'Contraseña incorrecta' })
         return
       }
     }
   } catch (error) {
-    res.status(500).send({ message: error.name + ': ' + error.message })
+    res.status(500).send({ message: 'Server error' })
   }
 }
 
