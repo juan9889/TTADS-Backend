@@ -14,19 +14,17 @@ const sequelize = new Sequelize(process.env.DB, process.env.DBUSER, process.env.
   }
 })
 
-module.exports = { sequelize, Sequelize }
-
 // define los esquemas
-require('../models/city.model.js')
-require('../models/province.model.js')
-require('../models/comm_category.model.js')
-require('../models/event_category.model.js')
-require('../models/event.model.js')
-require('../models/community.model.js')
-require('../models/user.model.js')
-require('../models/tokens.model.js')
-require('../models/user_community.model.js')
-require('../models/user_event.model.js')
+require('../models/city.model.js')(sequelize)
+require('../models/province.model.js')(sequelize)
+require('../models/comm_category.model.js')(sequelize)
+require('../models/event_category.model.js')(sequelize)
+require('../models/event.model.js')(sequelize)
+require('../models/community.model.js')(sequelize)
+require('../models/user.model.js')(sequelize)
+require('../models/tokens.model.js')(sequelize)
+require('../models/user_community.model.js')(sequelize)
+require('../models/user_event.model.js')(sequelize)
 
 applySchemaRelations(sequelize)
 

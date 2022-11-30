@@ -1,14 +1,15 @@
-const { sequelize, Sequelize } = require('../database/database.js')
+const Sequelize = require('sequelize')
 
-const city = sequelize.define('city', {
-  id: {
-    type: Sequelize.DataTypes.INTEGER,
-    primaryKey: true,
-    autoIncrement: true
-  },
-  name: {
-    type: Sequelize.DataTypes.STRING
-  }
-})
-
-module.exports = city
+module.exports = (sequelize) => {
+  const city = sequelize.define('city', {
+    id: {
+      type: Sequelize.DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true
+    },
+    name: {
+      type: Sequelize.DataTypes.STRING
+    }
+  })
+  return city
+}

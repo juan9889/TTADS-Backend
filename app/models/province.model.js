@@ -1,28 +1,29 @@
-const { sequelize, Sequelize } = require('../database/database.js')
+const Sequelize = require('sequelize')
 
-const province = sequelize.define('province', {
-  id: {
-    type: Sequelize.DataTypes.INTEGER,
-    primaryKey: true,
-    autoIncrement: true
-  },
-  name: {
-    type: Sequelize.DataTypes.STRING
-  }
-}, {
-  scopes: {
-    cities () {
-      return {
-        include: {
-          model: sequelize.models.city,
-          required: true,
+module.exports = (sequelize) => {
+  const province = sequelize.define('province', {
+    id: {
+      type: Sequelize.DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true
+    },
+    name: {
+      type: Sequelize.DataTypes.STRING
+    }
+  }, {
+    scopes: {
+      cities (provinceId) {
+        return {
+          where: {
+            id: provinceId
+          },
           include: {
-            model: sequelize.models.province,
+            model: sequelize.models.city,
             required: true
           }
         }
       }
     }
-  }
-})
-module.exports = province
+  })
+  return province
+}

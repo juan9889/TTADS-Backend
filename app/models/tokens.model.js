@@ -1,18 +1,19 @@
-const { sequelize, Sequelize } = require('../database/database.js')
+const Sequelize = require('sequelize')
 
-const token = sequelize.define('token', {
-  id: {
-    type: Sequelize.DataTypes.INTEGER,
-    primaryKey: true,
-    autoIncrement: true
-  },
-  accessToken: {
-    type: Sequelize.DataTypes.STRING
-  },
-  userId: {
-    type: Sequelize.DataTypes.INTEGER
-  }
+module.exports = (sequelize) => {
+  const token = sequelize.define('token', {
+    id: {
+      type: Sequelize.DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true
+    },
+    access_token: {
+      type: Sequelize.DataTypes.STRING
+    },
+    user_id: {
+      type: Sequelize.DataTypes.INTEGER
+    }
 
-})
-
-module.exports = token
+  })
+  return token
+}
