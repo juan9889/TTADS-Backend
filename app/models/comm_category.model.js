@@ -35,5 +35,6 @@ module.exports = (sequelize) => {
     }
   }
   )
+
   return comm_category
 }

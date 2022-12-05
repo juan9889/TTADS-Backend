@@ -1,4 +1,5 @@
-const userModel = require('../models/user.model')
+const sequelize = require('../database/database.js')
+const user = sequelize.models.user
 const jwt = require('jsonwebtoken')
 const isAuthenticated = async (req, res, next) => {
   try {
@@ -8,7 +9,7 @@ const isAuthenticated = async (req, res, next) => {
       return next('Please login to access the data')
     }
     const verify = jwt.verify(token, 'secreto_para_hacer_tokens_asdfgh')
-    req.user = await userModel.findOne({
+    req.user = await user.scope('find').findOne({
       where: {
         id: verify.id
       }
