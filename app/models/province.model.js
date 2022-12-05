@@ -12,14 +12,15 @@ module.exports = (sequelize) => {
     }
   }, {
     scopes: {
-      cities (provinceId) {
+      cities () {
         return {
-          where: {
-            id: provinceId
-          },
           include: {
             model: sequelize.models.city,
-            required: true
+            required: true,
+            include: {
+              model: sequelize.models.province,
+              required: true
+            }
           }
         }
       }

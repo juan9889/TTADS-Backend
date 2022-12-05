@@ -27,53 +27,27 @@ module.exports = (sequelize) => {
     }
   }, {
     scopes: {
-      findOne (eventId) {
+      find () {
         return {
-          where: {
-            id: eventId
-          },
-          include: [
-            {
-              model: sequelize.models.community,
-              required: true
-            },
-            {
-              model: sequelize.models.event_category,
-              required: true
-            },
-            {
-              model: sequelize.models.city,
-              required: true,
-              include: {
-                model: sequelize.models.province,
-                required: true
-              }
-            }
-          ]
-        }
-      },
-      findAll () {
-        return {
-          attributes: ['id', 'title', 'date', 'place', 'description', 'time', 'state'],
           include: [
             {
               model: sequelize.models.community,
               required: true,
-              attributes: ['name', 'id']
+              attributes: ['id', 'name']
             },
             {
               model: sequelize.models.event_category,
               required: true,
-              attributes: ['name', 'id', 'icon', 'iconColor']
+              attributes: ['id', 'name', 'icon', 'iconColor']
             },
             {
               model: sequelize.models.city,
               required: true,
-              attributes: ['name', 'id'],
+              attributes: ['id', 'name'],
               include: {
                 model: sequelize.models.province,
                 required: true,
-                attributes: ['name', 'id']
+                attributes: ['id', 'name']
               }
             }
           ]

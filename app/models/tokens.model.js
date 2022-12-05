@@ -7,10 +7,10 @@ module.exports = (sequelize) => {
       primaryKey: true,
       autoIncrement: true
     },
-    access_token: {
+    accessToken: {
       type: Sequelize.DataTypes.STRING
     },
-    user_id: {
+    userId: {
       type: Sequelize.DataTypes.INTEGER
     }
 
