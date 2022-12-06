@@ -15,7 +15,7 @@ module.exports = app => {
 
   router.get('/:id/communities', users.findCommunities)
 
-  router.get('/events', users.findEvents)
+  router.get('/events',isAuthenticated , users.findEvents)
 
   router.post('/login', users.login)
 

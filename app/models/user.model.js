@@ -21,6 +21,9 @@ module.exports = (sequelize) => {
     },
     mail: {
       type: Sequelize.DataTypes.STRING
+    },
+    isAdmin: {
+      type: Sequelize.DataTypes.BOOLEAN
     }
   }, {
     scopes: {
