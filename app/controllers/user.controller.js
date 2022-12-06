@@ -18,7 +18,7 @@ exports.create = async (req, res) => {
     password: req.body.password,
     name: req.body.name,
     mail: req.body.mail,
-    cityId: req.body.cityid
+    cityId: req.body.cityId
   })
   try {
     const existing = await User.findOne({
@@ -26,7 +26,7 @@ exports.create = async (req, res) => {
         username: user.username
       }
     })
-    if (existing.length == null) {
+    if (existing != null) {
       res.status(505).send({ message: 'El usuario ya existe' })
       return
     } else {
