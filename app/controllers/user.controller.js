@@ -247,7 +247,10 @@ exports.getJwtFromOauthGithubToken = async (req, res) => {
 function createToken (user) {
   const token = jwt.sign({
     name: user.name,
-    id: user.id
-  }, 'secreto_para_hacer_tokens_asdfgh')
+    id: user.id,
+    isAdmin: user.isAdmin
+  }, 'secreto_para_hacer_tokens_asdfgh', {
+    expiresIn: 36000
+  })
   return token
 }
