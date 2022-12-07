@@ -14,18 +14,6 @@ env:
   POOL_ACQUIRE: 30000
   POOL_IDLE: 10000
 jobs:
-  sonarcloud:
-    name: SonarCloud
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
   test:
     runs-on: ubuntu-latest
 
@@ -41,6 +29,8 @@ jobs:
         run: npm run build --if-present
       - name: Tests
         run: npm test -- --coverage --collectCoverageFrom="./app/**"
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
   deploy:
     name: Deploy
     runs-on: windows-latest
