@@ -1,4 +1,3 @@
-const { Request, Response, NextFunction } =require('express');
 const ctrl = require('../app/controllers/user.controller.js');
 
 //const sequelize = require('../app/database/database.js')
@@ -19,7 +18,7 @@ require('dotenv').config()
 });*/
 
 
-test('test login mock', async () => {
+test('test login con mock user', async () => {
 
   const instance = ctrl
   const spy = jest.spyOn(ctrl, 'findOneInternal');
@@ -43,29 +42,18 @@ test('test login mock', async () => {
     send: function(input) {this.text = input}
   }
 
-  const mockNext = jest.fn();
+
   spy.mockReturnValue(mock_user);
   await instance.login(mockRequest, mockResponse)
-  //mockResponse = await instance.login(mockRequest, mockResponse);
-  //await instance.findOneInternal('juan');
-  console.log(mockResponse)
+
   expect(mockResponse.code).toEqual(200)
  
   
   spy.mockRestore();
 });
 
-/*
-test('prueba login', () => {
-    const req = {
-      username:'juan',
-      password:'1234'
-    }
-    var res
-  expect(ctrl.login(req, res).toBeGreaterThan(0));
-});*/
 
-test('prueba login', () => {
+test('prueba token', () => {
   const user = {
       id: 1,
       name: 'Juan',
