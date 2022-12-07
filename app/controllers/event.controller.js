@@ -6,9 +6,9 @@ exports.create = (req, res) => {
   // Validate request
   if (!req.body.title || !req.body.description || !req.body.date ||
     !req.body.time || !req.body.cityId ||
-    !req.body.categoryId || !req.body.communityId) {
+    !req.body.categoryId || !req.body.communityId || !req.body.state) {
     res.status(400).send({
-      message: 'title, description, date, time can not be empty!'
+      message: 'Event body time can not be empty!'
     })
     return
   }

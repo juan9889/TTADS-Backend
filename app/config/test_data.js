@@ -33,7 +33,7 @@ exports.fillData = async () => {
   const index_sum_result = await sequelize.query('select ((select count(*) from cities) + (select count(*) from provinces) + (select count(*) from communities) + (select count(*) from comm_categories) + (select count(*) from event_categories) + (select count(*) from events)) as result;', { raw: true })
   console.log('Row count : ' + index_sum_result[0][0].result)
   const index_sum = index_sum_result[0][0].result
-  if (index_sum === 0) {
+  if (true) {
     console.log('La base de datos esta vacia, insertando datos de prueba...')
     console.log('Creando provincias...')
     provincia = {
@@ -174,7 +174,7 @@ exports.fillData = async () => {
       place: 'Cancha de futbol 5 de av. rondeau',
       description: 'El que pierde paga la coca',
       date: Date.now(),
-      state: 'Pendiente',
+      state: 1,
       time: '23:00',
       cityId: 2,
       categoryId: 4,
@@ -186,7 +186,7 @@ exports.fillData = async () => {
       place: 'Bar en calle cordoba 2342',
       description: 'Nos juntamos el viernes a la noche para una noche de karaoke',
       date: Date.now(),
-      state: 'Pendiente',
+      state: 1,
       time: '23:00',
       cityId: 2,
       categoryId: 2,
@@ -198,7 +198,7 @@ exports.fillData = async () => {
       place: 'Bar de la facu',
       description: 'Nos juntamos a repasar para el parcial de mañana',
       date: Date.now(),
-      state: 'Pendiente',
+      state: 1,
       time: '23:00',
       cityId: 2,
       categoryId: 1,

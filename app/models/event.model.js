@@ -23,7 +23,9 @@ module.exports = (sequelize) => {
       type: Sequelize.DataTypes.TIME
     },
     state: {
-      type: Sequelize.DataTypes.STRING
+      type: Sequelize.DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 0
     }
   }, {
     scopes: {

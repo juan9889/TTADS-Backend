@@ -71,7 +71,7 @@ function applySchemaRelations (sequelize) {
 
   // user event
   user.belongsToMany(event, { through: user_event })
-  user_event.belongsToMany(user, { through: user_event })
+  event.belongsToMany(user, { through: user_event })
 
   user.hasMany(user_event, { onDelete: 'RESTRICT' })
   user_event.belongsTo(user, { onDelete: 'RESTRICT' })

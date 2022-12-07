@@ -8,10 +8,13 @@ module.exports = (sequelize) => {
       autoIncrement: true
     },
     username: {
-      type: Sequelize.DataTypes.STRING
+      type: Sequelize.DataTypes.STRING,
+      unique: true
     },
-    used_oauth: {
-      type: Sequelize.DataTypes.BOOLEAN
+    usedOauth: {
+      type: Sequelize.DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: 0
     },
     password: {
       type: Sequelize.DataTypes.STRING
@@ -20,10 +23,13 @@ module.exports = (sequelize) => {
       type: Sequelize.DataTypes.STRING
     },
     mail: {
-      type: Sequelize.DataTypes.STRING
+      type: Sequelize.DataTypes.STRING,
+      unique: true
     },
-    isAdmin: {
-      type: Sequelize.DataTypes.BOOLEAN
+    admin: {
+      type: Sequelize.DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: 0
     }
   }, {
     scopes: {

@@ -240,7 +240,7 @@ exports.getJwtFromOauthGithubToken = async (req, res) => {
       let user_new = ({
         username: github_username,
         name: user_person_name,
-        used_oauth: true
+        usedOauth: true
       })
       await User.create(user_new)
       user_new = await User.findOne({
@@ -253,7 +253,7 @@ exports.getJwtFromOauthGithubToken = async (req, res) => {
       return
     } else {
       console.log('Existe un usuario con este nombre')
-      if (existing_user.used_oauth === true) {
+      if (existing_user.usedOauth === true) {
         console.log('Este usuario utiliza oauth')
         const jwt_token = createToken(existing_user)
         res.status(200).send({ data: existing_user, token: jwt_token })
@@ -274,7 +274,7 @@ function createToken (user) {
   const token = jwt.sign({
     name: user.name,
     id: user.id,
-    isAdmin: user.isAdmin
+    admin: user.admin
   }, 'secreto_para_hacer_tokens_asdfgh', {
     expiresIn: 36000
   })
