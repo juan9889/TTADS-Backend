@@ -3,6 +3,8 @@ TP de backend TTADS 2022
 
 [![Test](https://github.com/juan9889/TTADS-Backend/actions/workflows/build.yml/badge.svg)](https://github.com/juan9889/TTADS-Backend/actions/workflows/build.yml)
 
+[![Coverage](https://codecov.io/gh/juan9889/TTADS-Backend/branch/main/graph/badge.svg?token=VV0JKRVLE1)](https://codecov.io/gh/juan9889/TTADS-Backend)
+
 ### Integrantes:
 - Gino Bartolucci 47024
 - Juan Agustin Fogliato 43724
