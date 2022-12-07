@@ -24,6 +24,7 @@ const isAuthenticated = async (req, res, next) => {
   }
 }
 
+// eslint-disable-next-line no-unused-vars
 const hasClaim = async (req, res, next, claim) => {
   try {
     const token_bearer = req.header('authorization')

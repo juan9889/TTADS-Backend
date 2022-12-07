@@ -3,7 +3,7 @@ const axios = require('axios')
 const cookieParser = require('cookie-parser')
 const cors = require('cors')
 require('dotenv').config()
-const testdata = require('./app/config/test_data.js')
+const testdata = require('./app/database/seeds.js')
 const app = express()
 
 const corsOptions = {
