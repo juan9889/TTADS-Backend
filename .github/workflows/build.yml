@@ -18,7 +18,7 @@ jobs:
       - name: Build
         run: npm run build --if-present
       - name: Tests
-        run: echo No escribimos ninguna prueba xd
+        run: npm test -- --coverage --collectCoverageFrom="./app/**"
   deploy:
     name: Deploy
     runs-on: windows-latest
