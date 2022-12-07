@@ -208,20 +208,23 @@ exports.login = async (req, res) => {
       if (user.password === hash) {
       // crear token, guardarlo, etc, etc
         const token_res = module.exports.createToken(user)
-        res.status(200).send({ data: user, token: token_res })
-        //res.status(200).send('ok')
-        //res.send('OK')
+        //res.status(200).send({ data: user, token: token_res })
+        res.send({ data: user, token: token_res })
+        res.status(200)
+        
         return
       } else {
-        //res.status(500).send({ message: 'Contraseña incorrecta' })
+        res.status(500)
+        res.send({ message: 'Contraseña incorrecta' })
         
         return
       }
     }
   } catch (error) {
-    //console.log('err222or = '+error.message)
-    //res.status(500).send({ message: 'Server error' + error.message })
-    console.log(error)
+    
+    res.status(500)
+    res.send({ message: 'Server error' + error.message })
+  
   }
 }
 

@@ -38,7 +38,9 @@ test('test login mock', async () => {
   };
   const mockResponse = {
   code: '',
-    status: function(input) {this.code = input}
+  text:'' ,
+    status: function(input) {this.code = input},
+    send: function(input) {this.text = input}
   }
 
   const mockNext = jest.fn();
