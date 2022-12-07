@@ -1,9 +1,7 @@
 # TTADS-Backend
 TP de backend TTADS 2022
 
-<a href="">
-  <img src="https://github.com/juan9889/TTADS-Backend/actions/workflows/build.yml/badge.svg" width="15%">
-</a>
+[![Test](https://github.com/juan9889/TTADS-Backend/actions/workflows/build.yml/badge.svg)](https://github.com/juan9889/TTADS-Backend/actions/workflows/build.yml)
 
 ### Integrantes:
 - Gino Bartolucci 47024
