@@ -165,6 +165,15 @@ exports.findOne = async (req, res) => {
   }
 }
 
+exports.findOneInternal = async (username_query) =>{
+  const user = await User.scope('login_find').findOne({
+    where: {
+      username: username_query
+    }
+  })
+  return user;
+}
+
 exports.findMe = async (req, res) => {
   try {
     const id = req.user.id
@@ -179,6 +188,7 @@ exports.findMe = async (req, res) => {
 }
 
 exports.login = async (req, res) => {
+  console.log(req.body)
   if (!req.body.username || !req.body.password) {
     res.status(400).send({
       message: 'Login need to be complete'
@@ -187,28 +197,31 @@ exports.login = async (req, res) => {
     return
   }
   try {
-    const user = await User.findOne({
-      where: {
-        username: req.body.username
-      }
-    })
+    const user = await this.findOneInternal(req.body.username)
     if (user == null) {
       res.status(404).send({ message: 'No existe el usuario' })
       return
     } else {
       const hash = crypto.createHash('sha256').update(req.body.password).digest('hex')
+      console.log('hash : '+hash)
+      console.log('dbhash : '+user.password)
       if (user.password === hash) {
       // crear token, guardarlo, etc, etc
-        const token_res = createToken(user)
+        const token_res = module.exports.createToken(user)
         res.status(200).send({ data: user, token: token_res })
+        //res.status(200).send('ok')
+        //res.send('OK')
         return
       } else {
-        res.status(500).send({ message: 'Contraseña incorrecta' })
+        //res.status(500).send({ message: 'Contraseña incorrecta' })
+        
         return
       }
     }
   } catch (error) {
-    res.status(500).send({ message: 'Server error' + error.message })
+    //console.log('err222or = '+error.message)
+    //res.status(500).send({ message: 'Server error' + error.message })
+    console.log(error)
   }
 }
 
@@ -248,7 +261,7 @@ exports.getJwtFromOauthGithubToken = async (req, res) => {
           username: github_username
         }
       })
-      const jwt_token = createToken(user_new)
+      const jwt_token = module.exports.createToken(user_new)
       res.status(200).send({ data: user_new, token: jwt_token })
       return
     } else {

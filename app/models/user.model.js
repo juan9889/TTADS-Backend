@@ -52,6 +52,25 @@ module.exports = (sequelize) => {
           ]
         }
       },
+      login_find () {
+        return {
+          attributes: {
+            exclude: ['cityId']
+          },
+          include: [
+            {
+              model: sequelize.models.city,
+              // required: true, descomentar cuando resolvamos le problema de que todos deben tener ciudad
+              attributes: ['id', 'name'],
+              include: {
+                model: sequelize.models.province,
+                // required: true,
+                attributes: ['id', 'name']
+              }
+            }
+          ]
+        }
+      },
       events () {
         return {
           // falta completar
