@@ -270,7 +270,7 @@ exports.getJwtFromOauthGithubToken = async (req, res) => {
   }
 }
 
-function createToken (user) {
+exports.createToken = (user) => {
   const token = jwt.sign({
     name: user.name,
     id: user.id,

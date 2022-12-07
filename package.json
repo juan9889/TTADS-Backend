@@ -4,7 +4,7 @@
   "description": "Node.js Rest Apis with Express, Sequelize & MySQL",
   "main": "server.js",
   "scripts": {
-    "test": "jest",
+    "test": "jest --setupFiles dotenv/config",
     "dev": "nodemon server.js",
     "lint": "eslint .",
     "lint-fix": "eslint . --fix"

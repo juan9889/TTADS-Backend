@@ -1,6 +1,6 @@
-const ctrl = require('../controllers/user.controller.js');
-const sequelize = require('../database/database.js')
-const User = sequelize.models.user
+const ctrl = require('../app/controllers/user.controller.js');
+//const sequelize = require('../app/database/database.js')
+//const User = sequelize.models.user
 require('dotenv').config()
 test('prueba el login', () => {
     const user = {
