@@ -3,6 +3,16 @@ on:
   push:
     branches: [ main ]
   workflow_dispatch:
+env:
+  HOST: 'localhost'
+  DBUSER: 'ttads'
+  PASSWORD: 'ttads'
+  DB: 'testdb'
+  DIALECT: 'mysql'
+  POOL_MAX: 5
+  POOL_MIN: 0
+  POOL_ACQUIRE: 30000
+  POOL_IDLE: 10000
 jobs:
   build:
     runs-on: ubuntu-latest
