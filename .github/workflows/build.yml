@@ -1,4 +1,4 @@
-name: Build
+name: Test
 on:
   push:
     branches: [ main ]
@@ -14,7 +14,7 @@ env:
   POOL_ACQUIRE: 30000
   POOL_IDLE: 10000
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
 
     steps:
@@ -32,7 +32,7 @@ jobs:
   deploy:
     name: Deploy
     runs-on: windows-latest
-    needs: build
+    needs: test
     steps:
       - name: Deploy to server
         uses: garygrossgarten/github-action-ssh@release
