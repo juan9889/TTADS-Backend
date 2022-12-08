@@ -1,5 +1,6 @@
 const sequelize = require('../database/database.js')
 const Community = sequelize.models.community
+const user_community = require('./user_community.controller.js')
 
 // Create and Save a new ciudad
 exports.create = (req, res) => {
@@ -110,26 +111,35 @@ exports.update = (req, res) => {
     })
     return
   }
-  const id = req.params.id
-  Community.update(req.body, {
-    where: { id }
-  })
-    .then(num => {
-      if (num === 1) {
-        res.status(200).send({
-          message: 'Community was updated successfully.'
-        })
-      } else {
-        res.status(502).send({
-          message: `Cannot update community with id = ${id}.Maybe community was not found or req.body is empty!`
-        })
-      }
+  // Si "joined" es 1, se crea la relación entre el usuario y la comunidad.
+  // Si "joined" es -1, se elimina la relación entre el usuario y la comunidad.
+  // Si "joined" es 0, se actualiza la comunidad.
+  if (req.body.joined === 1) {
+    user_community.create(req, res)
+  } else if (req.body.joined === -1) {
+    user_community.delete(req, res)
+  } else {
+    const id = req.params.id
+    Community.update(req.body, {
+      where: { id }
     })
-    .catch(err => {
-      res.status(500).send({
-        message: err.name + ': ' + err.message || 'Error updating community with id=' + id
+      .then(num => {
+        if (num === 1) {
+          res.status(200).send({
+            message: 'Community was updated successfully.'
+          })
+        } else {
+          res.status(502).send({
+            message: `Cannot update community with id = ${id}.Maybe community was not found or req.body is empty!`
+          })
+        }
       })
-    })
+      .catch(err => {
+        res.status(500).send({
+          message: err.name + ': ' + err.message || 'Error updating community with id=' + id
+        })
+      })
+  }
 }
 
 // Delete a Tutorial with the specified id in the request

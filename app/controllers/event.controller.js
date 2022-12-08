@@ -1,5 +1,6 @@
 const sequelize = require('../database/database.js')
 const Event = sequelize.models.event
+const user_event = require('./user_event.controller.js')
 
 // Create and Save a new ciudad
 exports.create = (req, res) => {
@@ -91,26 +92,35 @@ exports.update = (req, res) => {
     })
     return
   }
-  const id = req.params.id
-  Event.update(req.body, {
-    where: { id }
-  })
-    .then(num => {
-      if (num === 1) {
-        res.status(200).send({
-          message: 'Event was updated successfully.'
-        })
-      } else {
-        res.status(502).send({
-          message: `Cannot update Event with id = ${id}.Maybe Event was not found or req.body is empty!`
-        })
-      }
+  // Si "joined" es 1, se crea la relación entre el usuario y la comunidad.
+  // Si "joined" es -1, se elimina la relación entre el usuario y la comunidad.
+  // Si "joined" es 0, se actualiza la comunidad.
+  if (req.body.joined === 1) {
+    user_event.create(req, res)
+  } else if (req.body.joined === -1) {
+    user_event.delete(req, res)
+  } else {
+    const id = req.params.id
+    Event.update(req.body, {
+      where: { id }
     })
-    .catch(err => {
-      res.status(500).send({
-        message: err.name + ': ' + err.message || 'Error updating ciudad with id=' + id
+      .then(num => {
+        if (num === 1) {
+          res.status(200).send({
+            message: 'Event was updated successfully.'
+          })
+        } else {
+          res.status(502).send({
+            message: `Cannot update Event with id = ${id}.Maybe Event was not found or req.body is empty!`
+          })
+        }
       })
-    })
+      .catch(err => {
+        res.status(500).send({
+          message: err.name + ': ' + err.message || 'Error updating ciudad with id=' + id
+        })
+      })
+  }
 }
 
 exports.delete = (req, res) => {
