@@ -271,7 +271,7 @@ exports.getJwtFromOauthGithubToken = async (req, res) => {
       console.log('Existe un usuario con este nombre')
       if (existing_user.usedOauth === true) {
         console.log('Este usuario utiliza oauth')
-        const jwt_token = createToken(existing_user)
+        const jwt_token = module.exports.createToken(existing_user)
         res.status(200).send({ data: existing_user, token: jwt_token })
         return
       } else {
