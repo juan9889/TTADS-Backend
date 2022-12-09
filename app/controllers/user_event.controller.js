@@ -9,8 +9,8 @@ exports.create = (req, res) => {
     return
   }
   const user_event = ({
-    userId: 1111111111,
-    eventId: req.body.eventId
+    userId: req.user.id,
+    eventId: req.params.id
   })
   User_event.create(user_event)
     .then(data => {
@@ -33,7 +33,7 @@ exports.delete = (req, res) => {
   }
   const id = req.params.id
   User_event.destroy({
-    where: { id }
+    where: { eventId: id, userId: req.user.id }
   })
     .then(num => {
       if (num === 1) {

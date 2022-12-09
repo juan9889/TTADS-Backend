@@ -95,9 +95,9 @@ exports.update = (req, res) => {
   // Si "joined" es 1, se crea la relación entre el usuario y la comunidad.
   // Si "joined" es -1, se elimina la relación entre el usuario y la comunidad.
   // Si "joined" es 0, se actualiza la comunidad.
-  if (req.body.joined === 1) {
+  if (req.body.joined == 1) {
     user_event.create(req, res)
-  } else if (req.body.joined === -1) {
+  } else if (req.body.joined == -1) {
     user_event.delete(req, res)
   } else {
     const id = req.params.id

@@ -1,3 +1,4 @@
+const isAuthenticated = require('../auth/authenticator.js')
 module.exports = app => {
   const Communities = require('../controllers/community.controller.js')
 
@@ -16,7 +17,7 @@ module.exports = app => {
   router.get('/:id', Communities.findOne)
 
   // Update a community with id
-  router.put('/:id', Communities.update)
+  router.put('/:id', isAuthenticated, Communities.update)
 
   // Delete a community with id
   router.delete('/:id', Communities.delete)

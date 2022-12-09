@@ -1,3 +1,4 @@
+const isAuthenticated = require('../auth/authenticator.js')
 module.exports = app => {
   const event = require('../controllers/event.controller.js')
   const router = require('express').Router()
@@ -12,7 +13,7 @@ module.exports = app => {
   router.get('/:id', event.findOne)
 
   // Update a Tutorial with id
-  router.put('/:id', event.update)
+  router.put('/:id', isAuthenticated, event.update)
 
   // Delete a Tutorial with id
   router.delete('/:id', event.delete)

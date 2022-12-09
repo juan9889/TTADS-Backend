@@ -11,8 +11,8 @@ exports.create = (req, res) => {
   }
   const user_community = ({
     mod: false, // Poner que solo el primer usuario sea mod.
-    userId: 1111111111,
-    communityId: req.body.communityId
+    userId: req.user.id,
+    communityId: req.params.id
   })
   User_community.create(user_community)
     .then(data => {
@@ -38,7 +38,8 @@ exports.delete = (req, res) => {
   const id = req.params.id
 
   User_community.destroy({
-    where: { id }
+    // eliminar cuando el id del usuario es igual al id del usuario logeado.
+    where: { communityId: id, userId: req.user.id }
   })
     .then(num => {
       if (num === 1) {

@@ -125,8 +125,6 @@ exports.fillData = async () => {
   } else {
     console.log('La base de datos no esta vacia')
     const categoriesIcon = misc.getAllMaterialIconsList().map((icon) => ({ iconName: icon }))
-    console.log(JSON.stringify(categoriesIcon))
-    console.log(misc.getAllMaterialIconsList())
   }
 }
 // eslint-disable-next-line no-unused-vars
