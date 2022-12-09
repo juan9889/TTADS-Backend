@@ -165,13 +165,13 @@ exports.findOne = async (req, res) => {
   }
 }
 
-exports.findOneInternal = async (username_query) =>{
+exports.findOneInternal = async (username_query) => {
   const user = await User.scope('login_find').findOne({
     where: {
       username: username_query
     }
   })
-  return user;
+  return user
 }
 
 exports.findMe = async (req, res) => {
@@ -198,33 +198,31 @@ exports.login = async (req, res) => {
   }
   try {
     const user = await this.findOneInternal(req.body.username)
-    if (user == null) {
+    if (user === null) {
       res.status(404).send({ message: 'No existe el usuario' })
       return
     } else {
       const hash = crypto.createHash('sha256').update(req.body.password).digest('hex')
-      console.log('hash : '+hash)
-      console.log('dbhash : '+user.password)
+      console.log('hash : ' + hash)
+      console.log('dbhash : ' + user.password)
       if (user.password === hash) {
       // crear token, guardarlo, etc, etc
         const token_res = module.exports.createToken(user)
-        //res.status(200).send({ data: user, token: token_res })
+        // res.status(200).send({ data: user, token: token_res })
         res.send({ data: user, token: token_res })
         res.status(200)
-        
+
         return
       } else {
         res.status(500)
         res.send({ message: 'Contraseña incorrecta' })
-        
+
         return
       }
     }
   } catch (error) {
-    
     res.status(500)
     res.send({ message: 'Server error' + error.message })
-  
   }
 }
 

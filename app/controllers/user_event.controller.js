@@ -1,54 +1,93 @@
 const sequelize = require('../database/database.js')
 const User_event = sequelize.models.user_event
+const { Op } = require('sequelize')
 
-exports.create = (req, res) => {
-  if (!req.params.id) { // No sé cual es la diferencia entre req.params.id y req.body.id
-    res.status(400).send({
-      message: 'id can not be empty!'
-    })
-    return
-  }
-  const user_event = ({
-    userId: req.user.id,
-    eventId: req.params.id
-  })
-  User_event.create(user_event)
-    .then(data => {
-      res.status(201).send(data)
-    })
-    .catch(err => {
-      res.status(500).send({
-        message:
-          err.name + ': ' + err.message || 'Some error occurred while creating '
-      })
-    })
-}
-
-exports.delete = (req, res) => {
+exports.create = async (req, res) => {
   if (!req.params.id) {
     res.status(400).send({
       message: 'id can not be empty!'
     })
     return
   }
-  const id = req.params.id
-  User_event.destroy({
-    where: { eventId: id, userId: req.user.id }
-  })
-    .then(num => {
-      if (num === 1) {
-        res.status(200).send({
-          message: 'User left the event successfully!'
-        })
-      } else {
-        res.status(502).send({
-          message: `Cannot left the event with id=${id}. Maybe Event was not found!`
-        })
+  try {
+    const user_event = ({
+      userId: req.user.id,
+      eventId: req.params.id
+    })
+    const newU_e = await User_event.create(user_event)
+    if (newU_e) {
+      return true
+    } else {
+      return false
+    }
+  } catch (err) {
+    return err
+  }
+}
+
+exports.delete = async (req, res) => {
+  if (!req.params.id) {
+    res.status(400).send({
+      message: 'id can not be empty!'
+    })
+    return
+  }
+  try {
+    const u_e = await User_event.destroy({
+      where: {
+        userId: req.user.id,
+        eventId: req.params.id
       }
     })
-    .catch(err => {
-      res.status(500).send({
-        message: err.name + ': ' + err.message || 'User could not leave the event with id=' + id
-      })
+    if (u_e) {
+      return true
+    } else {
+      return false
+    }
+  } catch (err) {
+    return err
+  }
+}
+
+exports.following = async (userId, eventId) => {
+  if (!userId || !eventId) {
+    throw new Error('Es necesario el id del usuario y el de comunidad')
+  }
+  try {
+    const u_e = await User_event.findOne({
+      where: {
+        [Op.and]: [
+          { userId },
+          { eventId }
+        ]
+      }
     })
+    if (u_e) {
+      return true
+    } else {
+      return false
+    }
+  } catch (err) {
+    return err
+  }
+}
+
+exports.followers = async (userId, eventId) => {
+  if (!userId || !eventId) {
+    throw new Error('Es necesario el id del usuario y el de comunidad')
+  }
+  try {
+    const u_e = await User_event.count({
+      where: {
+        eventId
+      }
+    })
+    if (u_e) {
+      return u_e
+    } else {
+      return -1
+    }
+  } catch (err) {
+    return err
+  }
 }

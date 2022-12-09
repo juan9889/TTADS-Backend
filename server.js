@@ -46,9 +46,9 @@ app.get('/oauth/redirect', (req, res) => {
 // set port, listen for requests
 const PORT = process.env.PORT || 8080
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}.`)
-  // metodo para llenar bd con datos de prueba si esta vacia
-  sleep(5000).then(() => { fillTestData() })
+  console.log('\x1b[32m%s\x1b[0m', `\n  Server is running on port ${PORT}.\n`)
+  console.log()
+  sleep(1500).then(() => { fillTestData() })
 })
 
 function sleep (ms) {
@@ -56,6 +56,6 @@ function sleep (ms) {
 }
 
 async function fillTestData () {
-  console.log('Metodo para llenar datos de prueba')
+  console.log('\x1b[33m%s\x1b[0m', '\nMetodo para llenar datos de prueba')
   await testdata.fillData()
 }

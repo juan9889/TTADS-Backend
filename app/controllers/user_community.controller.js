@@ -1,5 +1,6 @@
 const sequelize = require('../database/database.js')
 const User_community = sequelize.models.user_community
+const { Op } = require('sequelize')
 
 exports.create = (req, res) => {
   // Validate request
@@ -57,4 +58,31 @@ exports.delete = (req, res) => {
         message: err.name + ': ' + err.message || 'User could not leave the community with id=' + id
       })
     })
+}
+
+exports.mod = async (userId, communityId) => {
+  if (!userId || !communityId) {
+    throw new Error('Es necesario el id del usuario y el de comunidad')
+  }
+  try {
+    const u_c = await User_community.findOne({
+      where: {
+        [Op.and]: [
+          { userId },
+          { communityId }
+        ]
+      }
+    })
+    if (u_c !== null) {
+      if (u_c.mod === true) {
+        return true
+      } else {
+        return false
+      }
+    } else {
+      throw new Error('Server error.')
+    }
+  } catch (err) {
+    return err
+  }
 }
