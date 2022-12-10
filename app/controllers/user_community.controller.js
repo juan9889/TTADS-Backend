@@ -60,7 +60,7 @@ exports.delete = (req, res) => {
     })
 }
 
-exports.mod = async (userId, communityId) => {
+exports.getMod = async (userId, communityId) => {
   if (!userId || !communityId) {
     throw new Error('Es necesario el id del usuario y el de comunidad')
   }
@@ -80,7 +80,30 @@ exports.mod = async (userId, communityId) => {
         return false
       }
     } else {
-      throw new Error('Server error.')
+      throw new Error('El usuario no esta en la comunidad')
+    }
+  } catch (err) {
+    return err
+  }
+}
+
+exports.joined = async (userId, communityId) => {
+  if (!userId || !communityId) {
+    throw new Error('Es necesario el id del usuario y el de comunidad')
+  }
+  try {
+    const u_c = await User_community.findOne({
+      where: {
+        [Op.and]: [
+          { userId },
+          { communityId }
+        ]
+      }
+    })
+    if (u_c !== null) {
+      return true
+    } else {
+      return false
     }
   } catch (err) {
     return err

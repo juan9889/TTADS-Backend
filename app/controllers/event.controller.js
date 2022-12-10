@@ -14,9 +14,7 @@ exports.create = async (req, res) => {
     return
   }
   try {
-    const cId = req.body.communityId
-    const uId = req.user.id
-    const mod = User_community.mod(uId, cId)
+    const mod = User_community.getMod(req.user.id, req.body.communityId)
     if (mod === true) {
       const newEvent = await Event.create(req.body)
       if (newEvent) {
@@ -88,9 +86,7 @@ exports.update = async (req, res) => {
   }
   const id = req.params.id
   try {
-    const cId = req.body.communityId
-    const uId = req.user.id
-    const mod = await User_community.mod(uId, cId)
+    const mod = await User_community.getMod(req.user.id, req.body.communityId)
     if (mod === true) {
       const updatedEvent = await Event.update(req.body, {
         where: { id }
@@ -121,9 +117,7 @@ exports.delete = async (req, res) => {
   }
   const id = req.params.id
   try {
-    const cId = req.body.communityId
-    const uId = req.user.id
-    const mod = await User_community.mod(uId, cId)
+    const mod = await User_community.getMod(req.user.id, req.body.communityId)
     if (mod === true) {
       const delate = await Event.destroy({ where: { id } })
       if (delate) {
@@ -150,21 +144,34 @@ exports.follow = async (req, res) => {
   }
   const id = req.params.id
   try {
-    const uId = req.user.id
-    const following = await User_event.following(uId, id)
+    const following = await User_event.following(req.user.id, id)
     if (!following) { // no lo sigue
-      const follow = await User_event.create(req, res)
-      if (follow) {
-        res.status(200).send({ message: 'Siguendo al evento' })
-      } else {
-        res.status(502).send({ message: `No se puede seguir al evento con id=${id}.` })
+      const joined = await User_community.joined(req.user.id, req.body.communityId)
+      if (joined) { // esta en la comunidad
+        await follow()
+      } else { // no esta en la comunidad
+        // UNIRSE A LA COMUNIDAD const join = await User_community.create(req, res)
+        await follow()
       }
     } else { // lo sigue
-      const unfollow = await User_event.delete(req, res)
+      await unfollow()
+    }
+
+    // llamadas al user event
+    async function unfollow () {
+      const unfollow = await User_event.unfollow(req, res)
       if (unfollow) {
         res.status(200).send({ message: 'User left the event successfully!' })
       } else {
         res.status(502).send({ message: `Cannot left the event with id=${id}. Maybe Event was not found!` })
+      }
+    }
+    async function follow () {
+      const follow = await User_event.follow(req, res)
+      if (follow) {
+        res.status(200).send({ message: 'Siguendo al evento' })
+      } else {
+        res.status(502).send({ message: `No se puede seguir al evento con id=${id}.` })
       }
     }
   } catch (err) {
@@ -173,6 +180,8 @@ exports.follow = async (req, res) => {
     })
   }
 }
+
+// unfollow all
 
 exports.followers = async (req, res) => {
   if (!req.params.id || !req.body.communityId) {
