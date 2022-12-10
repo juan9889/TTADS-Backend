@@ -290,7 +290,7 @@ exports.createToken = (user) => {
     id: user.id,
     admin: user.admin
   }, 'secreto_para_hacer_tokens_asdfgh', {
-    expiresIn: 36000
+    expiresIn: '2d'
   })
   return token
 }
