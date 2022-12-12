@@ -2,7 +2,7 @@ const sequelize = require('../database/database.js')
 const User_community = sequelize.models.user_community
 const { Op } = require('sequelize')
 
-exports.create = (req, res) => {
+exports.create = async (req, res) => {
   // Validate request
   if (!req.params.id) {
     res.status(400).send({
@@ -29,7 +29,7 @@ exports.create = (req, res) => {
 
 // Crear una variable x que contenga el id del usuario que esta logeado.
 
-exports.delete = (req, res) => {
+exports.delete = async (req, res) => {
   if (!req.params.id) {
     res.status(400).send({
       message: 'id can not be empty!'
