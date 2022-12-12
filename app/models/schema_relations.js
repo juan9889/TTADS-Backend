@@ -4,7 +4,7 @@ function applySchemaRelations (sequelize) {
   province.hasMany(city, {
     foreignKey: 'provinceId',
     sourceKey: 'id',
-    onDelete: 'RESTRICT'
+    onDelete: 'SET NULL'
   })
   city.belongsTo(province, {
     foreignKey: 'provinceId',
@@ -14,7 +14,7 @@ function applySchemaRelations (sequelize) {
   comm_category.hasMany(community, {
     foreignKey: 'categoryId',
     sourceKey: 'id',
-    onDelete: 'RESTRICT'
+    onDelete: 'SET NULL'
   })
   community.belongsTo(comm_category, {
     foreignKey: 'categoryId',
@@ -24,7 +24,7 @@ function applySchemaRelations (sequelize) {
   event_category.hasMany(event, {
     foreignKey: 'categoryId',
     sourceKey: 'id',
-    onDelete: 'RESTRICT'
+    onDelete: 'SET NULL'
   })
   event.belongsTo(event_category, {
     foreignKey: 'categoryId',
@@ -34,7 +34,7 @@ function applySchemaRelations (sequelize) {
   community.hasMany(event, {
     foreignKey: 'communityId',
     sourceKey: 'id',
-    onDelete: 'RESTRICT'
+    onDelete: 'CASCADE'
   })
   event.belongsTo(community, {
     foreignKey: 'communityId',
@@ -44,7 +44,7 @@ function applySchemaRelations (sequelize) {
   city.hasMany(event, {
     foreignKey: 'cityId',
     sourceKey: 'id',
-    onDelete: 'RESTRICT'
+    onDelete: 'SET NULL'
   })
   event.belongsTo(city, {
     foreignKey: 'cityId',
@@ -54,7 +54,7 @@ function applySchemaRelations (sequelize) {
   city.hasMany(user, {
     foreignKey: 'cityId',
     sourceKey: 'id',
-    onDelete: 'RESTRICT'
+    onDelete: 'SET NULL'
   })
   user.belongsTo(city, {
     foreignKey: 'cityId',
@@ -64,19 +64,19 @@ function applySchemaRelations (sequelize) {
   user.belongsToMany(community, { through: user_community })
   community.belongsToMany(user, { through: user_community })
 
-  user.hasMany(user_community, { onDelete: 'RESTRICT' })
-  user_community.belongsTo(user, { onDelete: 'RESTRICT' })
-  community.hasMany(user_community, { onDelete: 'RESTRICT' })
-  user_community.belongsTo(community, { onDelete: 'RESTRICT' })
+  user.hasMany(user_community, { onDelete: 'CASCADE' })
+  user_community.belongsTo(user)
+  community.hasMany(user_community, { onDelete: 'CASCADE' })
+  user_community.belongsTo(community)
 
   // user event
   user.belongsToMany(event, { through: user_event })
   event.belongsToMany(user, { through: user_event })
 
-  user.hasMany(user_event, { onDelete: 'RESTRICT' })
-  user_event.belongsTo(user, { onDelete: 'RESTRICT' })
-  event.hasMany(user_event, { onDelete: 'RESTRICT' })
-  user_event.belongsTo(event, { onDelete: 'RESTRICT' })
+  user.hasMany(user_event, { onDelete: 'CASCADE' })
+  user_event.belongsTo(user)
+  event.hasMany(user_event, { onDelete: 'CASCADE' })
+  user_event.belongsTo(event)
 }
 
 module.exports = { applySchemaRelations }

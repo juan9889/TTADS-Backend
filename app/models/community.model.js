@@ -15,21 +15,17 @@ module.exports = (sequelize) => {
     }
   }, {
     scopes: {
-      find (userId) {
+      find () {
         return {
           include: [
-            {
-              model: sequelize.models.user_community,
-              attributes: [
-                'id', 'createdAt', 'mod'
-              ],
-              where: { userId },
-              required: false
-            },
             {
               model: sequelize.models.comm_category,
               required: true,
               attributes: ['id', 'name', 'icon', 'iconColor']
+            },
+            {
+              model: sequelize.models.user_community,
+              required: false
             }]
         }
       },
@@ -58,15 +54,18 @@ module.exports = (sequelize) => {
           }
         }
       },
-      events (userId) {
+      events () {
         return {
           include: [
             {
+              model: sequelize.models.comm_category,
+              required: true,
+              attributes: ['id', 'name', 'icon', 'iconColor']
+            }, {
               model: sequelize.models.user_community,
               attributes: [
                 'id', 'createdAt', 'mod'
               ],
-              where: { userId },
               required: false
             },
             {
@@ -76,14 +75,6 @@ module.exports = (sequelize) => {
                 exclude: ['cityId', 'communityId', 'categoryId']
               },
               include: [
-                {
-                  model: sequelize.models.user_event,
-                  attributes: [
-                    'id', 'createdAt', 'userId', 'eventId'
-                  ],
-                  where: { userId },
-                  required: false
-                },
                 {
                   model: sequelize.models.event_category,
                   required: true,
@@ -98,6 +89,13 @@ module.exports = (sequelize) => {
                     required: true,
                     attributes: ['id', 'name']
                   }
+                },
+                {
+                  model: sequelize.models.user_event,
+                  attributes: [
+                    'id', 'createdAt', 'userId', 'eventId'
+                  ],
+                  required: false
                 }
               ]
             }

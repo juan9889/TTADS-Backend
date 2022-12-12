@@ -5,7 +5,7 @@ module.exports = app => {
   const router = require('express').Router()
 
   // Create a new comunity
-  router.post('/', Communities.create)
+  router.post('/', isAuthenticated, Communities.create)
 
   // Retrieve all communities
   router.get('/', isAuthenticated, Communities.findAll)
@@ -20,7 +20,7 @@ module.exports = app => {
   router.put('/:id', isAuthenticated, Communities.update)
 
   // Delete a community with id
-  router.delete('/:id', Communities.delete)
+  router.delete('/:id', isAuthenticated, Communities.delete)
 
   router.get('/:id/events', isAuthenticated, Communities.findEvents)
 

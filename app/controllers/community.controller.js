@@ -1,34 +1,35 @@
 const sequelize = require('../database/database.js')
 const Community = sequelize.models.community
-const user_community = require('./user_community.controller.js')
+const User_community = require('./user_community.controller.js')
 
-// Create and Save a new ciudad
-exports.create = (req, res) => {
-  // Validate request
+exports.create = async (req, res) => {
   if (!req.body.name || !req.body.description || !req.body.categoryId) {
     res.status(400).send({
       message: 'name description or categoryId can not be empty!'
     })
     return
   }
-  const community = ({
-    name: req.body.name,
-    description: req.body.description,
-    categoryId: req.body.categoryId
-  })
-  Community.create(community)
-    .then(data => {
-      res.status(201).send(data)
-    })
-    .catch(err => {
-      res.status(500).send({
-        message:
+  try {
+    const newCommunity = await Community.join(req.body)
+    if (newCommunity) {
+      res.status(201).send(newCommunity)
+      const newU_c = await User_community.create(req, res, true, newCommunity.id)
+      if (newU_c) {
+        res.status(201).send(newCommunity)
+      } else {
+        res.status(502).send({ message: 'No se puede crear el la comunidad' })
+      }
+    } else {
+      res.status(502).send({ message: 'No se puede crear el la comunidad' })
+    }
+  } catch (err) {
+    res.status(500).send({
+      message:
           err.name + ': ' + err.message || 'Some error occurred while creating '
-      })
     })
+  }
 }
 
-// Retrieve all ciudades from the database.
 exports.findAll = (req, res) => {
   Community.scope({ method: ['find', req.user.id] }).findAll()
     .then(data => {
@@ -46,7 +47,6 @@ exports.findAll = (req, res) => {
     })
 }
 
-// Find a single ciudad with an id
 exports.findOne = (req, res) => {
   if (!req.params.id) {
     res.status(400).send({
@@ -55,7 +55,7 @@ exports.findOne = (req, res) => {
     return
   }
   const id = parseInt(req.params.id)
-  Community.scope('find').findByPk(id)
+  Community.scope({ method: ['find', req.user.id] }).findByPk(id)
     .then(data => {
       if (data) {
         console.log(data)
@@ -74,7 +74,6 @@ exports.findOne = (req, res) => {
     })
 }
 
-// Find communities by search term
 exports.findByTerm = (req, res) => {
   if (!req.params.term) {
     res.status(400).send({
@@ -103,47 +102,7 @@ exports.findByTerm = (req, res) => {
     })
 }
 
-// Update by the id in the request
-exports.update = (req, res) => {
-  if (!req.params.id) {
-    res.status(400).send({
-      message: 'id can not be empty!'
-    })
-    return
-  }
-  // Si "joined" es 1, se crea la relación entre el usuario y la comunidad.
-  // Si "joined" es -1, se elimina la relación entre el usuario y la comunidad.
-  // Si "joined" es 0, se actualiza la comunidad.
-  if (req.body.joined == 1) {
-    user_community.create(req, res)
-  } else if (req.body.joined == -1) {
-    user_community.delete(req, res)
-  } else {
-    const id = req.params.id
-    Community.update(req.body, {
-      where: { id }
-    })
-      .then(num => {
-        if (num === 1) {
-          res.status(200).send({
-            message: 'Community was updated successfully.'
-          })
-        } else {
-          res.status(502).send({
-            message: `Cannot update community with id = ${id}.Maybe community was not found or req.body is empty!`
-          })
-        }
-      })
-      .catch(err => {
-        res.status(500).send({
-          message: err.name + ': ' + err.message || 'Error updating community with id=' + id
-        })
-      })
-  }
-}
-
-// Delete a Tutorial with the specified id in the request
-exports.delete = (req, res) => {
+exports.update = async (req, res) => {
   if (!req.params.id) {
     res.status(400).send({
       message: 'id can not be empty!'
@@ -151,12 +110,44 @@ exports.delete = (req, res) => {
     return
   }
   const id = req.params.id
+  try {
+    const mod = await User_community.getMod(req.user.id, req.params.id)
+    if (mod === true) {
+      const community = await Community.update(req.body, { where: { id } })
+      if (community) {
+        res.status(200).send({
+          message: 'Community was updated successfully.'
+        })
+      } else {
+        res.status(502).send({
+          message: `Cannot update community with id = ${id}.Maybe community was not found or req.body is empty!`
+        })
+      }
+    } else {
+      res.status(401).send({ message: 'El usuario no es moderador de la comunidad.' })
+    }
+  } catch (err) {
+    res.status(500).send({
+      message: err.name + ': ' + err.message || 'Error updating community with id=' + id
+    })
+  }
+}
 
-  Community.destroy({
-    where: { id }
-  })
-    .then(num => {
-      if (num === 1) {
+// Delete a Tutorial with the specified id in the request
+exports.delete = async (req, res) => {
+  if (!req.params.id) {
+    res.status(400).send({
+      message: 'id can not be empty!'
+    })
+    return
+  }
+  const id = req.params.id
+  try {
+    const mod = await User_community.getMod(req.user.id, req.params.id)
+    if (mod === true) {
+      const community = await Community.destroy({ where: { id } })
+
+      if (community) {
         res.status(200).send({
           message: 'Community was deleted successfully!'
         })
@@ -165,12 +156,14 @@ exports.delete = (req, res) => {
           message: `Cannot delete Community with id=${id}. Maybe Community was not found!`
         })
       }
+    } else {
+      res.status(401).send({ message: 'El usuario no es moderador de la comunidad.' })
+    }
+  } catch (err) {
+    res.status(500).send({
+      message: err.name + ': ' + err.message || 'Error updating community with id=' + id
     })
-    .catch(err => {
-      res.status(500).send({
-        message: err.name + ': ' + err.message || 'Could not delete ciudad with id=' + id
-      })
-    })
+  }
 }
 
 exports.findEvents = (req, res) => {

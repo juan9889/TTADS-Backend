@@ -5,7 +5,7 @@ const User_event = require('./user_event.controller.js')
 
 exports.create = async (req, res) => {
   // Validate request
-  if (!req.params.id || !req.body.title || !req.body.description || !req.body.date ||
+  if (!req.body.title || !req.body.description || !req.body.date ||
     !req.body.time || !req.body.cityId ||
     !req.body.categoryId || !req.body.communityId || !req.body.state) {
     res.status(400).send({
@@ -20,7 +20,7 @@ exports.create = async (req, res) => {
       if (newEvent) {
         res.status(201).send(newEvent)
       } else {
-        res.status(502).send({ message: `No se puede crear el evento con id = ${req.params.id}` })
+        res.status(502).send({ message: 'No se puede crear el evento' })
       }
     } else {
       res.status(401).send({ message: 'El usuario no es moderador de la comunidad.' })

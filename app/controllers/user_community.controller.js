@@ -2,34 +2,35 @@ const sequelize = require('../database/database.js')
 const User_community = sequelize.models.user_community
 const { Op } = require('sequelize')
 
-exports.create = async (req, res) => {
-  // Validate request
+exports.join = async (req, res, mod, communityId) => {
   if (!req.params.id) {
     res.status(400).send({
       message: 'id can not be empty!'
     })
     return
-  }
-  const user_community = ({
-    mod: false, // Poner que solo el primer usuario sea mod.
-    userId: req.user.id,
-    communityId: req.params.id
-  })
-  User_community.create(user_community)
-    .then(data => {
-      res.status(201).send(data)
+  } try {
+    const user_community = ({
+      mod, // Poner que solo el primer usuario sea mod.
+      userId: req.user.id,
+      communityId
     })
-    .catch(err => {
-      res.status(500).send({
-        message:
+    const u_c = await User_community.create(user_community)
+    if (u_c) {
+      return true
+    } else {
+      return false
+    }
+  } catch (err) {
+    res.status(500).send({
+      message:
           err.name + ': ' + err.message || 'Some error occurred while creating '
-      })
     })
+  }
 }
 
 // Crear una variable x que contenga el id del usuario que esta logeado.
 
-exports.delete = async (req, res) => {
+exports.leave = async (req, res) => {
   if (!req.params.id) {
     res.status(400).send({
       message: 'id can not be empty!'
