@@ -8,7 +8,7 @@ module.exports = app => {
   router.post('/', Communities.create)
 
   // Retrieve all communities
-  router.get('/', Communities.findAll)
+  router.get('/', isAuthenticated, Communities.findAll)
 
   // Retrieve all that match search term in name or description
   router.get('/search/:term', Communities.findByTerm)
@@ -16,15 +16,13 @@ module.exports = app => {
   // Retrieve a single community with id
   router.get('/:id', Communities.findOne)
 
-  router.post('/:id/join', isAuthenticated, Communities.join)
-
   // Update a community with id
   router.put('/:id', isAuthenticated, Communities.update)
 
   // Delete a community with id
   router.delete('/:id', Communities.delete)
 
-  router.get('/:id/events', Communities.findEvents)
+  router.get('/:id/events', isAuthenticated, Communities.findEvents)
 
   app.use('/api/communities', router)
 }

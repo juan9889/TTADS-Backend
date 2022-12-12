@@ -1,6 +1,6 @@
 const sequelize = require('../database/database.js')
 const Community = sequelize.models.community
-const User_community = require('./User_community.controller.js')
+const user_community = require('./user_community.controller.js')
 
 // Create and Save a new ciudad
 exports.create = (req, res) => {
@@ -30,7 +30,7 @@ exports.create = (req, res) => {
 
 // Retrieve all ciudades from the database.
 exports.findAll = (req, res) => {
-  Community.scope('find').findAll()
+  Community.scope({ method: ['find', req.user.id] }).findAll()
     .then(data => {
       if (data) {
         res.status(200).send(data)
@@ -111,27 +111,34 @@ exports.update = (req, res) => {
     })
     return
   }
-  const id = req.params.id
-  try {
-    const updatedCommunity = Community.update(req.body, {
+  // Si "joined" es 1, se crea la relación entre el usuario y la comunidad.
+  // Si "joined" es -1, se elimina la relación entre el usuario y la comunidad.
+  // Si "joined" es 0, se actualiza la comunidad.
+  if (req.body.joined == 1) {
+    user_community.create(req, res)
+  } else if (req.body.joined == -1) {
+    user_community.delete(req, res)
+  } else {
+    const id = req.params.id
+    Community.update(req.body, {
       where: { id }
     })
-    if (updatedCommunity) {
-      res.status(200).send({
-        message: 'Community was updated successfully.'
+      .then(num => {
+        if (num === 1) {
+          res.status(200).send({
+            message: 'Community was updated successfully.'
+          })
+        } else {
+          res.status(502).send({
+            message: `Cannot update community with id = ${id}.Maybe community was not found or req.body is empty!`
+          })
+        }
       })
-      return
-    } else {
-      res.status(502).send({
-        message: `Cannot update community with id = ${id}. Maybe community was not found or req.body is empty!`
+      .catch(err => {
+        res.status(500).send({
+          message: err.name + ': ' + err.message || 'Error updating community with id=' + id
+        })
       })
-      return
-    }
-  } catch (err) {
-    res.status(500).send({
-      message: err.name + ': ' + err.message || 'Error updating community with id=' + id
-    })
-    return
   }
 }
 
@@ -174,7 +181,7 @@ exports.findEvents = (req, res) => {
     return
   }
   const id = parseInt(req.params.id)
-  Community.scope('events').findByPk(id)
+  Community.scope({ method: ['events', req.user.id] }).findByPk(id)
     .then(data => {
       if (data) {
         res.status(200).send(data)
@@ -188,29 +195,4 @@ exports.findEvents = (req, res) => {
           err.name + ': ' + err.message || 'Some error occurred while retrieving '
       })
     })
-}
-
-exports.join = async (req, res) => {
-  if (!req.params.id) {
-    res.status(400).send({
-      message: 'id can not be empty!'
-    })
-    return
-  }
-  const id = req.params.id
-  try {
-    const joined = await User_community.joined(req.user.id, id)
-    if (joined) { // esta en la comunidad
-      const leave = await User_community.leave(req, res)
-      return
-    } else { // no esta en la comunidad
-      const join = await User_community.join(req, res)
-      return
-    }
-  } catch (err) {
-    res.status(500).send({
-      message: err.name + ': ' + err.message || 'Server error al seguir al evento id=' + id
-    })
-    return
-  }
 }

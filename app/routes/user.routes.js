@@ -8,19 +8,22 @@ module.exports = app => {
 
   router.post('/', users.create)
 
+  router.post('/login', users.login)
+
+  router.put('/', isAuthenticated, users.update)
+
+  router.put('/password', isAuthenticated, users.password)
+
+  router.delete('/', isAuthenticated, users.delete)
+
   router.get('/', users.findAll)
 
-  // router.get('/:id', users.findOne)
-
-  router.get('/findusername/:username', users.findByUserName)
-
-  router.get('/:id/communities', users.findCommunities)
+  router.get('/communities', isAuthenticated, users.findCommunities)
 
   router.get('/events', isAuthenticated, users.findEvents)
 
-  router.post('/login', users.login)
+  router.get('/findusername/:username', users.findByUserName)
 
-  // router.get('/me', isAuthenticated, users.findOne)
   router.get('/me', isAuthenticated, users.findMe)
 
   router.get('/mo', isAuthenticated, admin, users.findMe)
