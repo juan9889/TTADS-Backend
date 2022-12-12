@@ -24,7 +24,7 @@ exports.follow = async (req, res) => {
         return false
       }
     } else {
-      res.status(401).send({ message: 'El usuario no esta en la comunidad.' })
+      res.status(401).send({ message: 'El usuario no esta unido a la comunidad.' })
     }
   } catch (err) {
     return err
@@ -60,7 +60,7 @@ exports.unfollow = async (req, res) => {
 }
 exports.following = async (userId, eventId) => {
   if (!userId || !eventId) {
-    throw new Error('Es necesario el id del usuario y el de comunidad')
+    throw new Error('Es necesario el id del usuario y el del evento.')
   }
   try {
     const u_e = await User_event.findOne({
