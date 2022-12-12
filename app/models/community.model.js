@@ -15,13 +15,22 @@ module.exports = (sequelize) => {
     }
   }, {
     scopes: {
-      find () {
+      find (userId) {
         return {
-          include: {
-            model: sequelize.models.comm_category,
-            required: true,
-            attributes: ['id', 'name', 'icon', 'iconColor']
-          }
+          include: [
+            {
+              model: sequelize.models.user_community,
+              attributes: [
+                'id', 'createdAt', 'mod'
+              ],
+              where: { userId },
+              required: false
+            },
+            {
+              model: sequelize.models.comm_category,
+              required: true,
+              attributes: ['id', 'name', 'icon', 'iconColor']
+            }]
         }
       },
       findByTerm (term) {
@@ -49,17 +58,31 @@ module.exports = (sequelize) => {
           }
         }
       },
-      events () {
+      events (userId) {
         return {
           include: [
             {
+              model: sequelize.models.user_community,
+              attributes: [
+                'id', 'createdAt', 'mod'
+              ],
+              where: { userId },
+              required: false
+            },
+            {
               model: sequelize.models.event,
               required: true,
+              attributes: {
+                exclude: ['cityId', 'communityId', 'categoryId']
+              },
               include: [
                 {
-                  model: sequelize.models.community,
-                  required: true,
-                  attributes: ['id', 'name']
+                  model: sequelize.models.user_event,
+                  attributes: [
+                    'id', 'createdAt', 'userId', 'eventId'
+                  ],
+                  where: { userId },
+                  required: false
                 },
                 {
                   model: sequelize.models.event_category,

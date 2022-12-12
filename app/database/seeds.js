@@ -35,7 +35,7 @@ exports.fillData = async () => {
         {
           username: faker.internet.userName(),
           usedOauth: 0,
-          password: crypto.createHash('sha256').update(faker.internet.password(8)).digest('hex'),
+          password: crypto.createHash('sha256').update('12345678').digest('hex'),
           name: faker.name.fullName(),
           mail: faker.internet.email(),
           admin: 0,

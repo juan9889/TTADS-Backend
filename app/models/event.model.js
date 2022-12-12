@@ -29,13 +29,38 @@ module.exports = (sequelize) => {
     }
   }, {
     scopes: {
-      find () {
+      find (userId) {
         return {
+          attributes: {
+            exclude: ['cityId', 'communityId', 'categoryId']
+          },
+          // attributes: [
+          //   'id', 'title', 'place', 'description', 'date', 'time', 'state', 'createdAt',
+          //   'updatedAt', 'categoryId',
+          //   [sequelize.fn('COUNT', sequelize.col('user_events.id')), 'followers']
+          // ],
+          // group: ['event.id'],
           include: [
+            {
+              model: sequelize.models.user_event,
+              attributes: [
+                'id', 'createdAt'
+              ],
+              where: { userId },
+              required: false
+            },
             {
               model: sequelize.models.community,
               required: true,
-              attributes: ['id', 'name']
+              attributes: ['id', 'name'],
+              include: {
+                model: sequelize.models.user_community,
+                attributes: [
+                  'id', 'createdAt', 'mod'
+                ],
+                where: { userId },
+                required: false
+              }
             },
             {
               model: sequelize.models.event_category,
@@ -53,6 +78,7 @@ module.exports = (sequelize) => {
               }
             }
           ]
+
         }
       }
     }

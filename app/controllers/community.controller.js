@@ -30,7 +30,7 @@ exports.create = (req, res) => {
 
 // Retrieve all ciudades from the database.
 exports.findAll = (req, res) => {
-  Community.scope('find').findAll()
+  Community.scope({ method: ['find', req.user.id] }).findAll()
     .then(data => {
       if (data) {
         res.status(200).send(data)
@@ -181,7 +181,7 @@ exports.findEvents = (req, res) => {
     return
   }
   const id = parseInt(req.params.id)
-  Community.scope('events').findByPk(id)
+  Community.scope({ method: ['events', req.user.id] }).findByPk(id)
     .then(data => {
       if (data) {
         res.status(200).send(data)

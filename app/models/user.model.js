@@ -71,9 +71,11 @@ module.exports = (sequelize) => {
           ]
         }
       },
-      events () {
+      events (userId) {
         return {
-          // falta completar
+          attributes: {
+            exclude: ['password', 'cityId']
+          },
           include: [
             {
               model: sequelize.models.event,
@@ -81,9 +83,23 @@ module.exports = (sequelize) => {
               attributes: ['id', 'title', 'date', 'place', 'description', 'time', 'state'],
               include: [
                 {
+                  model: sequelize.models.user_event,
+                  where: { userId },
+                  attributes: []
+                },
+                {
                   model: sequelize.models.community,
                   required: true,
-                  attributes: ['id', 'name']
+                  attributes: ['id', 'name'],
+                  include: [
+                    {
+                      model: sequelize.models.user_community,
+                      attributes: [
+                        'id', 'createdAt', 'userId', 'communityId', 'mod'
+                      ],
+                      where: { userId },
+                      required: false
+                    }]
                 },
                 {
                   model: sequelize.models.event_category,
@@ -103,25 +119,30 @@ module.exports = (sequelize) => {
               ]
             }
           ]
+
         }
       },
-      communities () {
+      communities (userId) {
         return {
-          // falta completar
+          attributes: {
+            exclude: ['password', 'cityId']
+          },
           include: [{
             model: sequelize.models.community,
             required: true,
             attributes: ['id', 'name'],
-            include: {
+            include: [{
               model: sequelize.models.comm_category,
               required: true,
               attributes: ['id', 'name', 'icon', 'iconColor']
-            }
-          },
-          {
-            model: sequelize.models.user_community,
-            required: true
+            },
+            {
+              model: sequelize.models.user_community,
+              where: { userId },
+              attributes: []
+            }]
           }]
+
         }
       }
     }
