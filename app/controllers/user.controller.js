@@ -43,18 +43,18 @@ exports.create = async (req, res) => {
 
 exports.update = async (req, res) => {
   // Validate request
-  if (!req.body.username || !req.body.name || !req.body.mail || !req.body.cityId || !req.user.id) {
+  if (!req.body.username || !req.body.name || !req.body.mail || !req.body.cityId) {
     res.status(400).send({
       message: 'User need to be complete'
     })
     return
   }
   try {
-    const id = req.user.id
+    const id = req.params.id
     const updateUser = await User.update(req.body, {
       where: { id }
     })
-    if (updateUser) {
+    if (updateUser === 1) {
       res.status(200).send({
         message: 'User was updated successfully.'
       })
@@ -67,57 +67,7 @@ exports.update = async (req, res) => {
     res.status(500).send({ message: error.name + ': ' + error.message })
   }
 }
-
-exports.password = async (req, res) => {
-  // Validate request
-  if (!req.body.password || !req.user.id) {
-    res.status(400).send({
-      message: 'User need to be complete'
-    })
-    return
-  }
-  try {
-    const password = crypto.createHash('sha256').update(req.body.password).digest('hex')
-    const id = req.user.id
-    const updateUser = await User.update({ password }, {
-      where: { id }
-    })
-    if (updateUser) {
-      res.status(200).send({
-        message: 'User was updated successfully.'
-      })
-    } else {
-      res.status(502).send({
-        message: `Cannot update User with id = ${id}.Maybe User was not found or req.body is empty!`
-      })
-    }
-  } catch (error) {
-    res.status(500).send({ message: error.name + ': ' + error.message })
-  }
-}
-
-exports.delete = async (req, res) => {
-  if (!req.user.id) {
-    res.status(400).send({
-      message: 'Se necesita minimamente el id'
-    })
-    return
-  }
-  const id = req.user.id
-  try {
-    const delate = await User.destroy({ where: { id } })
-    if (delate) {
-      res.status(200).send({ message: 'Event was deleted successfully!' })
-    } else {
-      res.status(502).send({ message: `Cannot delete user with id=${id}.` })
-    }
-  } catch (err) {
-    res.status(500).send({
-      message: err.name + ': ' + err.message || 'Could not delete user with id=' + id
-    })
-  }
-}
-
+// Find a single user with username
 exports.findByUserName = async (req, res) => {
   try {
     if (!req.params.username) {
@@ -157,13 +107,14 @@ exports.findAll = async (req, res) => {
 
 exports.findEvents = async (req, res) => {
   try {
-    if (!req.user.id) {
+    if (!req.params.id) {
       res.status(400).send({
         message: 'user id can not be empty!'
       })
       return
     }
-    const user = await User.scope({ method: ['events', req.user.id] }).findByPk(req.user.id)
+    const id = parseInt(req.params.id)
+    const user = await User.scope('events').findByPk(id)
     if (user) {
       res.status(200).send(user)
     } else {
@@ -176,13 +127,14 @@ exports.findEvents = async (req, res) => {
 
 exports.findCommunities = async (req, res) => {
   try {
-    if (!req.user.id) {
+    if (!req.params.id) {
       res.status(400).send({
         message: 'user id can not be empty!'
       })
       return
     }
-    const user = await User.scope({ method: ['communities', req.user.id] }).findByPk(req.user.id)
+    const id = parseInt(req.params.id)
+    const user = await User.scope('communities').findByPk(id)
     if (user) {
       res.status(200).send(user)
     } else {

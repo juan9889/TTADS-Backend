@@ -32,25 +32,26 @@ exports.create = async (req, res) => {
   }
 }
 
-exports.findAll = async (req, res) => {
-  const data = await Event.scope({ method: ['find', req.user.id] }).findAll()
-  try {
-    if (data) {
-      res.status(200).send(data)
-    } else {
-      res.status(404).send({
-        message: 'Cannot find with.'
-      })
-    }
-  } catch (err) {
-    res.status(500).send({
-      message:
-          err.name + ': ' + err.message || 'Error retrieving'
+exports.findAll = (req, res) => {
+  Event.scope('find').findAll()
+    .then(data => {
+      if (data) {
+        res.status(200).send(data)
+      } else {
+        res.status(404).send({
+          message: 'Cannot find with.'
+        })
+      }
     })
-  }
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.name + ': ' + err.message || 'Error retrieving'
+      })
+    })
 }
 
-exports.findOne = async (req, res) => {
+exports.findOne = (req, res) => {
   if (!req.params.id) {
     res.status(400).send({
       message: 'id can not be empty!'
@@ -58,22 +59,22 @@ exports.findOne = async (req, res) => {
     return
   }
   const id = parseInt(req.params.id)
-  try {
-    // eslint-disable-next-line prefer-const, no-var
-    var data = await Event.scope({ method: ['find', req.user.id] }).findByPk(id)
-    if (data) {
-      res.status(200).send(data)
-    } else {
-      res.status(404).send({
-        message: `Cannot find with id=${id}.`
-      })
-    }
-  } catch (err) {
-    res.status(500).send({
-      message:
-          err.name + ': ' + err.message || 'Error retrieving  with id=' + id
+  Event.scope('find').findByPk(id)
+    .then(data => {
+      if (data) {
+        res.status(200).send(data)
+      } else {
+        res.status(404).send({
+          message: `Cannot find with id=${id}.`
+        })
+      }
     })
-  }
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.name + ': ' + err.message || 'Error retrieving  with id=' + id
+      })
+    })
 }
 
 exports.update = async (req, res) => {
@@ -147,31 +148,13 @@ exports.follow = async (req, res) => {
     if (!following) { // no lo sigue
       const joined = await User_community.joined(req.user.id, req.body.communityId)
       if (joined) { // esta en la comunidad
-        await follow()
+        await User_event.follow(req, res)
       } else { // no esta en la comunidad
         // UNIRSE A LA COMUNIDAD const join = await User_community.create(req, res)
-        await follow()
+        await User_event.follow(req, res)
       }
     } else { // lo sigue
-      await unfollow()
-    }
-
-    // llamadas al user event
-    async function unfollow () {
-      const unfollow = await User_event.unfollow(req, res)
-      if (unfollow) {
-        res.status(200).send({ message: 'User left the event successfully!' })
-      } else {
-        res.status(502).send({ message: `Cannot left the event with id=${id}. Maybe Event was not found!` })
-      }
-    }
-    async function follow () {
-      const follow = await User_event.follow(req, res)
-      if (follow) {
-        res.status(200).send({ message: 'Siguendo al evento' })
-      } else {
-        res.status(502).send({ message: `No se puede seguir al evento con id=${id}.` })
-      }
+      await User_event.unfollow(req, res)
     }
   } catch (err) {
     res.status(500).send({
@@ -181,21 +164,23 @@ exports.follow = async (req, res) => {
 }
 
 // unfollow all
+
 exports.followers = async (req, res) => {
-  if (!req.params.id) {
+  if (!req.params.id || !req.body.communityId) {
     res.status(400).send({
-      message: 'Se necesita minimamente el id del evento '
+      message: 'Se necesita minimamente el id de comunidad y evento '
     })
     return
   }
   const id = req.params.id
   try {
-    const followers = await User_event.followers(id)
-    if (followers) {
-      if (followers === -1) {
-        res.status(200).send({ followers: 0 })
+    const uId = req.user.id
+    const following = await User_event.following(uId, id)
+    if (following) {
+      if (following === -1) {
+        res.status(200).send(0)
       } else {
-        res.status(200).send({ followers })
+        res.status(200).send(following)
       }
     } else {
       res.status(502).send({ message: `Error con los seguidores del evento con id=${id}.` })

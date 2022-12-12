@@ -81,8 +81,8 @@ exports.following = async (userId, eventId) => {
   }
 }
 
-exports.followers = async (eventId) => {
-  if (!eventId) {
+exports.followers = async (userId, eventId) => {
+  if (!userId || !eventId) {
     throw new Error('Es necesario el id del usuario y el de comunidad')
   }
   try {

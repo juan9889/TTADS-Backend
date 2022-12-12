@@ -1,11 +1,10 @@
 module.exports = app => {
   const provinces = require('../controllers/province.controller.js')
-  const isAuthenticated = require('../auth/authenticator.js')
-  const admin = require('../auth/authorizator.js')
+
   const router = require('express').Router()
 
   // Create a new Tutorial
-  router.post('/', isAuthenticated, admin, provinces.create)
+  router.post('/', provinces.create)
 
   // Retrieve all Tutorials
   router.get('/', provinces.findAll)
@@ -14,10 +13,10 @@ module.exports = app => {
   router.get('/:id', provinces.findOne)
 
   // Update a Tutorial with id
-  router.put('/:id', isAuthenticated, admin, provinces.update)
+  router.put('/:id', provinces.update)
 
   // Delete a Tutorial with id
-  router.delete('/:id', isAuthenticated, admin, provinces.delete)
+  router.delete('/:id', provinces.delete)
 
   // Retrieve a single Tutorial with id
   router.get('/:id/cities', provinces.findCities)
