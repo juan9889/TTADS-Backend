@@ -14,7 +14,7 @@ module.exports = app => {
   router.get('/search/:term', Communities.findByTerm)
 
   // Retrieve a single community with id
-  router.get('/:id', Communities.findOne)
+  router.get('/:id', isAuthenticated, Communities.findOne)
 
   // Update a community with id
   router.put('/:id', isAuthenticated, Communities.update)

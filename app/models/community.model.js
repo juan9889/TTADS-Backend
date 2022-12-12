@@ -81,6 +81,11 @@ module.exports = (sequelize) => {
                   attributes: ['id', 'name', 'icon', 'iconColor']
                 },
                 {
+                  model: sequelize.models.community,
+                  required: true,
+                  attributes: ['id', 'name']
+                },
+                {
                   model: sequelize.models.city,
                   required: true,
                   attributes: ['id', 'name'],
