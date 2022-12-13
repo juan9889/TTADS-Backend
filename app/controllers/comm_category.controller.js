@@ -147,7 +147,8 @@ exports.findCommunities = (req, res) => {
       if (data) {
         res.status(200).send(data)
       } else {
-        res.status(404).send({ message: 'Cannot find' })
+        //res.status(404).send({ message: 'Cannot find' })
+        res.status(200).send(data)
       }
     })
     .catch(err => {
