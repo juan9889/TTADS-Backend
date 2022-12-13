@@ -144,12 +144,9 @@ exports.findCommunities = (req, res) => {
   const id = parseInt(req.params.id)
   Comm_Category.scope('communities').findByPk(id)
     .then(data => {
-      if (data) {
+      
         res.status(200).send(data)
-      } else {
-        //res.status(404).send({ message: 'Cannot find' })
-        res.status(200).send(data)
-      }
+      
     })
     .catch(err => {
       res.status(500).send({
