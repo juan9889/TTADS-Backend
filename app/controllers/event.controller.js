@@ -135,7 +135,7 @@ exports.delete = async (req, res) => {
 }
 
 exports.follow = async (req, res) => {
-  if (!req.params.id || !req.body.communityId) {
+  if (!req.params.id) {
     res.status(400).send({
       message: 'Se necesita minimamente el id de comunidad y evento '
     })
@@ -143,36 +143,26 @@ exports.follow = async (req, res) => {
   }
   const id = req.params.id
   try {
-    const following = await User_event.following(req.user.id, id)
-    if (!following) { // no lo sigue
-      const joined = await User_community.joined(req.user.id, req.body.communityId)
-      if (joined) { // esta en la comunidad
-        await follow()
-      } else { // no esta en la comunidad
-        // UNIRSE A LA COMUNIDAD const join = await User_community.create(req, res)
-        await follow()
+    const event = await Event.findByPk(id)
+    if (event) {
+      const following = await User_event.following(req.user.id, id)
+      console.log('following: ' + following)
+      if (!following) { // no lo sigue
+        const joined = await User_community.joined(req.user.id, event.communityId)
+        console.log('joined: ' + following)
+        if (joined) { // esta en la comunidad
+          await User_event.follow(req, res)
+        } else { // no esta en la comunidad
+          await User_community.join()
+          await User_event.follow(req, res)
+        }
+      } else { // lo sigue
+        await User_event.unfollow(req, res)
       }
-    } else { // lo sigue
-      await unfollow()
+    } else {
+      res.status(404).send({ message: 'El evento no existe' })
     }
-
     // llamadas al user event
-    async function unfollow () {
-      const unfollow = await User_event.unfollow(req, res)
-      if (unfollow) {
-        res.status(200).send({ message: 'User left the event successfully!' })
-      } else {
-        res.status(502).send({ message: `Cannot left the event with id=${id}. Maybe Event was not found!` })
-      }
-    }
-    async function follow () {
-      const follow = await User_event.follow(req, res)
-      if (follow) {
-        res.status(200).send({ message: 'Siguendo al evento' })
-      } else {
-        res.status(502).send({ message: `No se puede seguir al evento con id=${id}.` })
-      }
-    }
   } catch (err) {
     res.status(500).send({
       message: err.name + ': ' + err.message || 'Server error al seguir al evento id=' + id

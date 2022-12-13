@@ -10,13 +10,13 @@ exports.create = async (req, res) => {
     return
   }
   try {
-    const newCommunity = await Community.join(req.body)
+    const newCommunity = await Community.create(req.body)
     if (newCommunity) {
-      res.status(201).send(newCommunity)
-      const newU_c = await User_community.create(req, res, true, newCommunity.id)
+      const newU_c = await User_community.join(req, res, true, newCommunity.id)
       if (newU_c) {
         res.status(201).send(newCommunity)
       } else {
+        await Community.destroy({ where: { id: newCommunity.id } })
         res.status(502).send({ message: 'No se puede crear el la comunidad' })
       }
     } else {
@@ -133,7 +133,35 @@ exports.update = async (req, res) => {
   }
 }
 
-// Delete a Tutorial with the specified id in the request
+exports.join = async (req, res) => {
+  if (!req.params.id) {
+    res.status(400).send({
+      message: 'id can not be empty!'
+    })
+    return
+  }
+  const id = req.params.id
+  try {
+    const community = Community.findByPk(id)
+    if (community) {
+      const joined = await User_community.joined(req.user.id, id)
+      if (joined) { // esta en la comunidad
+        await User_community.leave(req, res)
+        return
+      } else { // no esta en la comunidad
+        await User_community.join(req, res, false, id)
+        return
+      }
+    } else {
+      res.status(404).send({ message: 'La comunidad no existe' })
+    }
+  } catch (err) {
+    res.status(500).send({
+      message: err.name + ': ' + err.message || 'Server error al seguir al evento id=' + id
+    })
+  }
+}
+
 exports.delete = async (req, res) => {
   if (!req.params.id) {
     res.status(400).send({
