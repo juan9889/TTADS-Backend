@@ -14,8 +14,10 @@ exports.create = async (req, res) => {
     return
   }
   try {
-    const mod = User_community.getMod(req.user.id, req.body.communityId)
-    if (mod === true) {
+    console.log(req.user.id + '   ---   ' + req.body.communityId)
+    const mod = await User_community.getMod(req.user.id, req.body.communityId)
+    if (mod == true) {
+      console.log('es mod')
       const newEvent = await Event.create(req.body)
       if (newEvent) {
         res.status(201).send(newEvent)

@@ -109,8 +109,9 @@ exports.getMod = async (userId, communityId) => {
         ]
       }
     })
+    console.log('********'+u_c)
     if (u_c !== null) {
-      if (u_c.mod === true) {
+      if (u_c.mod == true) {
         return true
       } else {
         return false
