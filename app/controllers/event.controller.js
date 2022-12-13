@@ -165,7 +165,7 @@ exports.follow = async (req, res) => {
         if (joined) { // esta en la comunidad
           await User_event.follow(req, res)
         } else { // no esta en la comunidad
-          await User_community.join()
+          await User_community.join(req, res, false, event.communityId)
           await User_event.follow(req, res)
         }
       } else { // lo sigue
