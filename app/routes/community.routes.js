@@ -15,6 +15,8 @@ module.exports = app => {
 
   router.put('/:id', isAuthenticated, Communities.update)
 
+  router.delete('/:id', isAuthenticated, Communities.delete)
+
   router.get('/search/:term', isAuthenticated, Communities.findByTerm)
 
   router.get('/:id', isAuthenticated, Communities.findOne)
