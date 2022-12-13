@@ -204,11 +204,9 @@ exports.findEvents = (req, res) => {
   const id = parseInt(req.params.id)
   Community.scope({ method: ['events', req.user.id] }).findByPk(id)
     .then(data => {
-      if (data) {
+      
         res.status(200).send(data)
-      } else {
-        res.status(404).send({ message: 'Cannot find' })
-      }
+      
     })
     .catch(err => {
       res.status(500).send({
