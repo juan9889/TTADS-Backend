@@ -81,7 +81,7 @@ exports.findByTerm = (req, res) => {
     })
     return
   }
-  const term = parseInt(req.params.term)
+  const term = req.params.term
   console.log('Req parm :' + req.params.term)
   Community.scope({ method: ['findByTerm', term] }).findAll()
     .then(data => {

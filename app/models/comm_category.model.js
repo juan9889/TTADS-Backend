@@ -24,11 +24,18 @@ module.exports = (sequelize) => {
             model: sequelize.models.community,
             required: true,
             attributes: ['id', 'name'],
-            include: {
+            include: [{
               model: sequelize.models.comm_category,
               required: true,
               attributes: ['id', 'name', 'icon', 'iconColor']
+            },
+            {
+              model: sequelize.models.user_community,
+              attributes: [
+                'id', 'createdAt', 'userId', 'communityId', 'mod'
+              ]
             }
+            ]
           }
         }
       }

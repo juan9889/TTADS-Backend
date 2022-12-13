@@ -47,11 +47,15 @@ module.exports = (sequelize) => {
               }
             ]
           },
-          include: {
+          include: [{
             model: sequelize.models.comm_category,
             required: true,
             attributes: ['id', 'name', 'icon', 'iconColor']
-          }
+          },
+          {
+            model: sequelize.models.user_community,
+            required: false
+          }]
         }
       },
       events () {

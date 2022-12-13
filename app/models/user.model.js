@@ -84,8 +84,7 @@ module.exports = (sequelize) => {
               include: [
                 {
                   model: sequelize.models.user_event,
-                  where: { userId },
-                  attributes: []
+                  where: { userId }
                 },
                 {
                   model: sequelize.models.community,
@@ -138,8 +137,7 @@ module.exports = (sequelize) => {
             },
             {
               model: sequelize.models.user_community,
-              where: { userId },
-              attributes: []
+              where: { userId }
             }]
           }]
 

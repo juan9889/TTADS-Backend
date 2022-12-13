@@ -13,7 +13,7 @@ module.exports = app => {
 
   router.get('/', isAuthenticated, Communities.findAll)
 
-  router.get('/search/:term', Communities.findByTerm)
+  router.get('/search/:term', isAuthenticated, Communities.findByTerm)
 
   router.get('/:id', isAuthenticated, Communities.findOne)
 

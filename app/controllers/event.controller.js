@@ -7,7 +7,7 @@ exports.create = async (req, res) => {
   // Validate request
   if (!req.body.title || !req.body.description || !req.body.date ||
     !req.body.time || !req.body.cityId ||
-    !req.body.categoryId || !req.body.communityId || !req.body.state) {
+    !req.body.categoryId || !req.body.communityId || (req.body.state < 0 || req.body.state > 2)) {
     res.status(400).send({
       message: 'Event body time can not be empty!'
     })
@@ -16,7 +16,7 @@ exports.create = async (req, res) => {
   try {
     console.log(req.user.id + '   ---   ' + req.body.communityId)
     const mod = await User_community.getMod(req.user.id, req.body.communityId)
-    if (mod == true) {
+    if (mod) {
       console.log('es mod')
       const newEvent = await Event.create(req.body)
       if (newEvent) {
@@ -79,28 +79,33 @@ exports.findOne = async (req, res) => {
 }
 
 exports.update = async (req, res) => {
-  if (!req.params.id || !req.body.communityId) {
+  if (!req.params.id) {
     res.status(400).send({
-      message: 'Se necesita minimamente el id de comunidad y evento '
+      message: 'Se necesita minimamente el id de evento '
     })
     return
   }
   const id = req.params.id
   try {
-    const mod = await User_community.getMod(req.user.id, req.body.communityId)
-    if (mod === true) {
-      const updatedEvent = await Event.update(req.body, {
-        where: { id }
-      })
-      if (updatedEvent) {
-        res.status(200).send({
-          message: 'Event was updated successfully.'
+    const event = await Event.findByPk(id)
+    if (event) {
+      const mod = await User_community.getMod(req.user.id, event.communityId)
+      if (mod === true) {
+        const updatedEvent = await Event.update(req.body, {
+          where: { id }
         })
+        if (updatedEvent) {
+          res.status(200).send({
+            message: 'Event was updated successfully.'
+          })
+        } else {
+          res.status(502).send({ message: `No se puede actualizar el evento con id = ${id}` })
+        }
       } else {
-        res.status(502).send({ message: `No se puede actualizar el evento con id = ${id}` })
+        res.status(401).send({ message: 'El usuario no es moderador de la comunidad.' })
       }
     } else {
-      res.status(401).send({ message: 'El usuario no es moderador de la comunidad.' })
+      res.status(404).send({ message: 'El evento no existe' })
     }
   } catch (err) {
     res.status(500).send({
@@ -110,7 +115,7 @@ exports.update = async (req, res) => {
 }
 
 exports.delete = async (req, res) => {
-  if (!req.params.id || !req.body.communityId) {
+  if (!req.params.id) {
     res.status(400).send({
       message: 'Se necesita minimamente el id de comunidad y evento '
     })
@@ -118,16 +123,21 @@ exports.delete = async (req, res) => {
   }
   const id = req.params.id
   try {
-    const mod = await User_community.getMod(req.user.id, req.body.communityId)
-    if (mod === true) {
-      const delate = await Event.destroy({ where: { id } })
-      if (delate) {
-        res.status(200).send({ message: 'Event was deleted successfully!' })
+    const event = await Event.findByPk(id)
+    if (event) {
+      const mod = await User_community.getMod(req.user.id, event.communityId)
+      if (mod === true) {
+        const delate = await Event.destroy({ where: { id } })
+        if (delate) {
+          res.status(200).send({ message: 'Event was deleted successfully!' })
+        } else {
+          res.status(502).send({ message: `Cannot delete Event with id=${id}.` })
+        }
       } else {
-        res.status(502).send({ message: `Cannot delete Event with id=${id}.` })
+        res.status(401).send({ message: 'El usuario no es moderador de la comunidad.' })
       }
     } else {
-      res.status(401).send({ message: 'El usuario no es moderador de la comunidad.' })
+      res.status(404).send({ message: 'El evento no existe' })
     }
   } catch (err) {
     res.status(500).send({
