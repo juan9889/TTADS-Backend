@@ -13,6 +13,8 @@ module.exports = app => {
 
   router.get('/', isAuthenticated, Communities.findAll)
 
+  router.put('/:id', isAuthenticated, Communities.update)
+
   router.get('/search/:term', isAuthenticated, Communities.findByTerm)
 
   router.get('/:id', isAuthenticated, Communities.findOne)
